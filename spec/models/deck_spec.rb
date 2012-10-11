@@ -4,6 +4,7 @@ describe Deck do
   before do
     @deck = Deck.new
   end
+
   it "has 32 cards" do
     @deck.cards.count.should == 32
   end

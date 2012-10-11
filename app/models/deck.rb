@@ -8,6 +8,10 @@ class Deck
     end
   end
 
+  def shuffle
+    cards.shuffle
+  end
+
   class << self
     def data
       [
