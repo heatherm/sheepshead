@@ -13,7 +13,7 @@ describe Game do
     end
 
     it "has a deck" do
-      game = Game.make!
+      game = Game.make
       game.deck.should_not be_nil
     end
   end
