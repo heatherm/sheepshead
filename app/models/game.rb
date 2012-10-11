@@ -5,6 +5,7 @@ class Game < ActiveRecord::Base
   has_many :players, through: :game_players
 
   def initialize
+    super
     @deck = Deck.new
   end
 end
