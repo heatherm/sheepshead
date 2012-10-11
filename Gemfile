@@ -10,7 +10,8 @@ group :assets do
 end
 
 group :test, :development do
-  gem "rspec-rails", "~> 2.0"
+  gem 'rspec-rails', '~> 2.0'
+  gem 'machinist', '>= 2.0.0.beta2'
 end
 
 gem 'jquery-rails'
