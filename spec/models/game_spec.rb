@@ -11,5 +11,10 @@ describe Game do
       GamePlayer.make!
       game.players.count.should == 2
     end
+
+    it "has a deck" do
+      game = Game.make!
+      game.deck.should_not be_nil
+    end
   end
 end
