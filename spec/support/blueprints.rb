@@ -1,9 +1,13 @@
 require 'machinist/active_record'
 
-# Add your blueprints here.
-#
-# e.g.
-#   Post.blueprint do
-#     title { "Post #{sn}" }
-#     body  { "Lorem ipsum..." }
-#   end
+Game.blueprint do
+end
+
+GamePlayer.blueprint do
+  game { Game.make! }
+  player { Player.make! }
+end
+
+Player.blueprint do
+  username { "user#{sn}" }
+end
