@@ -15,4 +15,20 @@ describe Game do
       Game.make!.cards.first.should_not == Deck.data.first
     end
   end
+
+  describe "deal" do
+    before do
+      @game = Game.make!
+      @game.deal
+    end
+
+    it "should deal 6 cards to 5 players" do
+      @game.players.each do |p|
+        p.hand.count.should == 6
+      end
+    end
+    it "should deal 2 cards to the blind" do
+      @game.blind.count.should == 2
+    end
+  end
 end

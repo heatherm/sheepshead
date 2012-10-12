@@ -3,12 +3,14 @@ require 'spec_helper'
 describe Player do
   describe "relations" do
     it "games" do
-      player = Player.make!
       game = Game.make!
-      second_game = Game.make!
-      GamePlayer.make!(player: player, game: game)
-      GamePlayer.make!(player: player, game: second_game)
-      player.games.should =~ [game, second_game]
+      game.players.first.games.first.should == game
+    end
+  end
+
+  describe "hand" do
+    it "should be an empty array on initialize" do
+      Player.make!.hand.should == []
     end
   end
 end
