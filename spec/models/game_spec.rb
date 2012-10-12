@@ -10,5 +10,9 @@ describe Game do
     it "has 5 players" do
       Game.make!.players.count.should == 5
     end
+
+    it "should have a shuffled deck" do
+      Game.make!.cards.first.should_not == Deck.data.first
+    end
   end
 end
