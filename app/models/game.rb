@@ -21,13 +21,19 @@ class Game < ActiveRecord::Base
       game_player.player = player
       game_player.save!
     end
-    deck.cards.shuffle!
+    cards.shuffle!
   end
 
   def deal
     deal_three_to_each_player
     deal_blind
     deal_three_to_each_player
+  end
+
+  def redeal?
+    players.each do |p|
+      !(p.has_face? || p.has_trump? || p.has_ace?)
+    end
   end
 
   def deal_three_to_each_player

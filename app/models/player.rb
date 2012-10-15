@@ -9,4 +9,31 @@ class Player < ActiveRecord::Base
     @hand = []
   end
 
+  def has_face?
+    @hand.each do |c|
+      if (c.rank == :queen ||c.rank == :king || c.rank == :jack)
+        return true
+      end
+    end
+    false
+  end
+
+  def has_trump?
+    @hand.each do |c|
+      if c.trump
+        return true
+      end
+    end
+    false
+  end
+
+  def has_ace?
+    @hand.each do |c|
+      if c.rank == :ace
+        return true
+      end
+    end
+    false
+  end
+
 end

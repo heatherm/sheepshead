@@ -27,8 +27,17 @@ describe Game do
         p.hand.count.should == 6
       end
     end
+
     it "should deal 2 cards to the blind" do
       @game.blind.count.should == 2
     end
+
+    it "should redeal when a player's hand has no aces, no face cards and no trump" do
+      @game.players.each do |p|
+        p.hand = {}
+      end
+      @game.redeal?.should be_true
+    end
   end
+
 end
