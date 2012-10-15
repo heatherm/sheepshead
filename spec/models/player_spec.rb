@@ -30,5 +30,18 @@ describe Player do
       ]
       player.pick?.should be_true
     end
+
+    it "should not pick if the hand is weak" do
+      player = Player.make!
+      player.hand = [
+          {suit: :clubs, rank: :queen, value: 3, trump: true},
+          {suit: :hearts, rank: :queen, value: 3, trump: true},
+          {suit: :hearts, rank: :jack, value: 2, trump: true},
+          {suit: :spades, rank: :ace, value: 11, trump: false},
+          {suit: :hearts, rank: :nine, value: 0, trump: false},
+          {suit: :hearts, rank: :eight, value: 0, trump: false}
+      ]
+      player.pick?.should be_false
+    end
   end
 end
