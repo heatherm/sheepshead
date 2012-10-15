@@ -13,4 +13,22 @@ describe Player do
       Player.make!.hand.should == []
     end
   end
+
+  describe "pick?" do
+    it "should pick if the hand is strong" do
+      #Generally, it is best not to pick up the blind unless the player has four or more trump in a five-handed game,
+      #and it is best if at least one of those trump is a queen. Picking on three trump is unwise, unless they are very
+      #highly powered cards.
+      player = Player.make!
+      player.hand = [
+          {suit: :clubs, rank: :queen, value: 3, trump: true},
+          {suit: :hearts, rank: :queen, value: 3, trump: true},
+          {suit: :spades, rank: :jack, value: 2, trump: true},
+          {suit: :hearts, rank: :jack, value: 2, trump: true},
+          {suit: :spades, rank: :ace, value: 11, trump: false},
+          {suit: :hearts, rank: :nine, value: 0, trump: false}
+      ]
+      player.pick?.should be_true
+    end
+  end
 end

@@ -9,6 +9,10 @@ class Player < ActiveRecord::Base
     @hand = []
   end
 
+  def pick?
+    @hand.count{|c| c[:trump] } > 3
+  end
+
   def has_face?
     @hand.each do |c|
       if (c.rank == :queen ||c.rank == :king || c.rank == :jack)
