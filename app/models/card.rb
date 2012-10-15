@@ -7,4 +7,12 @@ class Card
     @value = args[:value]
     @trump = args[:trump]
   end
+
+  def trump?
+    self[:trump] == true
+  end
+
+  def fail?
+    self[:trump] == false
+  end
 end

@@ -18,6 +18,10 @@ describe Card do
   end
 
   it "knows if it is trump" do
-    @card.trump.should == true
+    @card.trump?.should == true
+  end
+
+  it "knows if it is fail" do
+    @card.fail?.should == false
   end
 end
