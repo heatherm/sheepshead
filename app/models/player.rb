@@ -15,7 +15,7 @@ class Player < ActiveRecord::Base
 
   def has_face?
     @hand.each do |c|
-      rank = c[:rank]
+      rank = c.rank
       if (rank == :queen || rank == :king || rank == :jack)
         return true
       end
@@ -34,7 +34,7 @@ class Player < ActiveRecord::Base
 
   def has_ace?
     @hand.each do |c|
-      if c[:rank] == :ace
+      if c.rank == :ace
         return true
       end
     end

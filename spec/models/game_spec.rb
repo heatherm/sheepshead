@@ -44,7 +44,7 @@ describe Game do
 
         it "should redeal when a player's hand has no aces, no face cards and no trump" do
           @game.players.each do |p|
-            p.hand = {}
+            p.hand = []
           end
           @game.redeal?.should be_true
         end

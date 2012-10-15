@@ -9,10 +9,10 @@ class Card
   end
 
   def trump?
-    self[:trump] == true
+    self.trump == true
   end
 
   def fail?
-    self[:trump] == false
+    self.trump == false
   end
 end
