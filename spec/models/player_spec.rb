@@ -21,12 +21,12 @@ describe Player do
       #highly powered cards.
       player = Player.make!
       player.hand = [
-          {suit: :clubs, rank: :queen, value: 3, trump: true},
-          {suit: :hearts, rank: :queen, value: 3, trump: true},
-          {suit: :spades, rank: :jack, value: 2, trump: true},
-          {suit: :hearts, rank: :jack, value: 2, trump: true},
-          {suit: :spades, rank: :ace, value: 11, trump: false},
-          {suit: :hearts, rank: :nine, value: 0, trump: false}
+          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true}),
+          Card.new({suit: :spades, rank: :jack, value: 2, trump: true}),
+          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true}),
+          Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
+          Card.new({suit: :hearts, rank: :nine, value: 0, trump: false})
       ]
       player.pick?.should be_true
     end
@@ -34,14 +34,32 @@ describe Player do
     it "should not pick if the hand is weak" do
       player = Player.make!
       player.hand = [
-          {suit: :clubs, rank: :queen, value: 3, trump: true},
-          {suit: :hearts, rank: :queen, value: 3, trump: true},
-          {suit: :hearts, rank: :jack, value: 2, trump: true},
-          {suit: :spades, rank: :ace, value: 11, trump: false},
-          {suit: :hearts, rank: :nine, value: 0, trump: false},
-          {suit: :hearts, rank: :eight, value: 0, trump: false}
+          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true}),
+          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true}),
+          Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
+          Card.new({suit: :hearts, rank: :nine, value: 0, trump: false}),
+          Card.new({suit: :hearts, rank: :eight, value: 0, trump: false})
       ]
       player.pick?.should be_false
+    end
+  end
+
+  describe "bury" do
+    it "should try to eliminate fail suits" do
+      player = Player.make!
+      player.hand = [
+          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true}),
+          Card.new({suit: :spades, rank: :queen, value: 3, trump: true}),
+          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true}),
+          Card.new({suit: :hearts, rank: :nine, value: 0, trump: false}),
+          Card.new({suit: :hearts, rank: :eight, value: 0, trump: false}),
+          Card.new({suit: :spades, rank: :eight, value: 0, trump: false}),
+          Card.new({suit: :clubs, rank: :eight, value: 0, trump: false})
+      ]
+      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual.should =~ ["spades - eight", "clubs - eight"]
     end
   end
 end

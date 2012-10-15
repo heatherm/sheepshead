@@ -13,6 +13,26 @@ class Player < ActiveRecord::Base
     @hand.count{|c| c.trump? } > 3
   end
 
+  def bury
+    bury = []
+    fail = @hand.select{ |card| card.fail? }
+    if fail.count > 2
+      hearts = fail.select{|c| c.suit == :hearts }
+      spades = fail.select{|c| c.suit == :spades }
+      clubs = fail.select{|c| c.suit == :clubs }
+      if hearts.count == 1 && bury.count < 2
+        bury << hearts.first
+      end
+      if spades.count == 1 && bury.count < 2
+        bury << spades.first
+      end
+      if clubs.count == 1 && bury.count < 2
+        bury << clubs.first
+      end
+    end
+    bury
+  end
+
   def has_face?
     @hand.each do |c|
       rank = c.rank
