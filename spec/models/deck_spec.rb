@@ -14,6 +14,6 @@ describe Deck do
   end
 
   it "has 14 trump" do
-    @deck.cards.select{ |c| c.trump }.count.should == 14
+    @deck.cards.count{ |c| c.trump? }.should == 14
   end
 end
