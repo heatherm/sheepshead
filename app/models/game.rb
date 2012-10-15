@@ -28,12 +28,16 @@ class Game < ActiveRecord::Base
     deal_three_to_each_player
     deal_blind
     deal_three_to_each_player
+    deal if redeal?
   end
 
   def redeal?
     players.each do |p|
-      !(p.has_face? || p.has_trump? || p.has_ace?)
+      if !(p.has_face? || p.has_trump? || p.has_ace?)
+        return true
+      end
     end
+    false
   end
 
   def deal_three_to_each_player
