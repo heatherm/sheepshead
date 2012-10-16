@@ -18,7 +18,6 @@ class Player < ActiveRecord::Base
     fail = @hand.select{ |card| card.fail? }
     trump = @hand.select { |card| card.trump? }
     if fail.count > 2
-      p "more than 2 fail"
       hearts = fail.select{|c| c.suit == :hearts }
       spades = fail.select{|c| c.suit == :spades }
       clubs = fail.select{|c| c.suit == :clubs }
@@ -32,7 +31,12 @@ class Player < ActiveRecord::Base
         bury << clubs.first
       end
     elsif fail.count == 1
-      bury << trump.sort{|x, y| y.trump_rank <=> x.trump_rank}.last(2)
+      high_value_trump = trump.select {|card| card.value > 9}
+      if high_value_trump.count > 1
+        bury << high_value_trump.sort{|x, y| y.value <=> x.value }.last(2)
+      else
+        bury << trump.sort{|x, y| y.trump_rank <=> x.trump_rank}.last(2)
+      end
     end
     bury.flatten
   end
