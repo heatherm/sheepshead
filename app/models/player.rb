@@ -10,7 +10,13 @@ class Player < ActiveRecord::Base
   end
 
   def pick?
-    @hand.count{|c| c.trump? } > 3
+    trump = @hand.select{|c| c.trump?}
+    num_trump = trump.count
+    trump_value = 0
+    trump.each do |card|
+      trump_value += card.trump_rank
+    end
+    num_trump > 3 && trump_value > 30
   end
 
   def bury

@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Player do
@@ -21,10 +22,10 @@ describe Player do
       #highly powered cards.
       player = Player.make!
       player.hand = [
-          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true}),
-          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true}),
-          Card.new({suit: :spades, rank: :jack, value: 2, trump: true}),
-          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true}),
+          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true, trump_rank: 12}),
+          Card.new({suit: :spades, rank: :jack, value: 2, trump: true, trump_rank: 9}),
+          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true, trump_rank: 8}),
           Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
           Card.new({suit: :hearts, rank: :nine, value: 0, trump: false})
       ]
@@ -34,12 +35,28 @@ describe Player do
     it "should not pick if the hand is weak" do
       player = Player.make!
       player.hand = [
-          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true}),
-          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true}),
-          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true}),
+          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true, trump_rank: 12}),
+          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true, trump_rank: 8}),
           Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
           Card.new({suit: :hearts, rank: :nine, value: 0, trump: false}),
           Card.new({suit: :hearts, rank: :eight, value: 0, trump: false})
+      ]
+      player.pick?.should be_false
+    end
+
+    it "should not pick if trump are little: J♣, J♦, A♦, 8♦, A♠, A♥" do
+      #Don't take the blind. You have 4 trump, but they are mostly little. If you have a chronic picking problem you may pick on this.
+      #If you pass on the blind, you have a very good chance of ending up partner, since you have 2 of the 3 fail aces.
+      #This is a decent partner hand, with the trump and lots of point to "schmear" to your partner.
+      player = Player.make!
+      player.hand = [
+          Card.new({suit: :clubs, rank: :jack, value: 2, trump: true, trump_rank: 10}),
+          Card.new({suit: :diamonds, rank: :jack, value: 2, trump: true, trump_rank: 11}),
+          Card.new({suit: :diamonds, rank: :ace, value: 11, trump: true, trump_rank: 6}),
+          Card.new({suit: :diamonds, rank: :eight, value: 0, trump: true, trump_rank: 2}),
+          Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
+          Card.new({suit: :hearts, rank: :ace, value: 11, trump: false})
       ]
       player.pick?.should be_false
     end
