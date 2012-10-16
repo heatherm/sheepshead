@@ -11,12 +11,13 @@ class Player < ActiveRecord::Base
 
   def pick?
     trump = @hand.select{|c| c.trump?}
+    max_points_to_bury = @hand.sort{|x, y| x.value <=> y.value }.last(2).map(&:value).sum
     num_trump = trump.count
     trump_value = 0
     trump.each do |card|
       trump_value += card.trump_rank
     end
-    num_trump > 3 && trump_value > 30
+    (num_trump > 3 && trump_value > 33) || (trump_value > 29 && max_points_to_bury > 19)
   end
 
   def bury

@@ -60,6 +60,20 @@ describe Player do
       ]
       player.pick?.should be_false
     end
+
+    it "If you can forsee schneider, pick! Hand 3: Q♠, Q♥, 7♦, K♦, 10♥, 10♣" do
+      #With 20 points to bury, this wouldn't be a bad hand to pick on.
+      player = Player.make!
+      player.hand = [
+          Card.new({suit: :spades, rank: :queen, value: 3, trump: true, trump_rank: 13}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true, trump_rank: 12}),
+          Card.new({suit: :diamonds, rank: :king, value: 4, trump: true, trump_rank: 4}),
+          Card.new({suit: :diamonds, rank: :seven, value: 0, trump: true, trump_rank: 1}),
+          Card.new({suit: :hearts, rank: :ten, value: 10, trump: false}),
+          Card.new({suit: :clubs, rank: :ten, value: 10, trump: false})
+      ]
+      player.pick?.should be_true
+    end
   end
 
   describe "bury" do
