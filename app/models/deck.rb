@@ -3,8 +3,8 @@ class Deck
 
   def initialize
     @cards = []
-    Deck.data.each do |card_data|
-      @cards << Card.new(card_data)
+    Deck.data.each do |card|
+      @cards << card
     end
   end
 

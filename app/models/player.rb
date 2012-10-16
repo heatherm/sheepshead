@@ -16,7 +16,9 @@ class Player < ActiveRecord::Base
   def bury
     bury = []
     fail = @hand.select{ |card| card.fail? }
+    trump = @hand.select { |card| card.trump? }
     if fail.count > 2
+      p "more than 2 fail"
       hearts = fail.select{|c| c.suit == :hearts }
       spades = fail.select{|c| c.suit == :spades }
       clubs = fail.select{|c| c.suit == :clubs }
@@ -29,8 +31,10 @@ class Player < ActiveRecord::Base
       if clubs.count == 1 && bury.count < 2
         bury << clubs.first
       end
+    elsif fail.count == 1
+      bury << trump.sort{|x, y| y.trump_rank <=> x.trump_rank}.last(2)
     end
-    bury
+    bury.flatten
   end
 
   def has_face?
