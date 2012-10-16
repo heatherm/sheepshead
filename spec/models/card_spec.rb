@@ -2,26 +2,30 @@ require 'spec_helper'
 
 describe Card do
   before do
-    @card = Card.new({suit: :clubs, rank: :queen, value: 3, trump: true})
+    @queen_of_clubs = Deck.data.first
   end
 
   it "has a suit" do
-    @card.suit.should == :clubs
+    @queen_of_clubs.suit.should == :clubs
   end
 
   it "has a rank" do
-    @card.rank.should == :queen
+    @queen_of_clubs.rank.should == :queen
   end
 
   it "has a point value" do
-    @card.value.should == 3
+    @queen_of_clubs.value.should == 3
   end
 
   it "knows if it is trump" do
-    @card.trump?.should == true
+    @queen_of_clubs.trump?.should == true
+  end
+
+  it "has a trump rank" do
+    @queen_of_clubs.trump_rank.should == 14
   end
 
   it "knows if it is fail" do
-    @card.fail?.should == false
+    @queen_of_clubs.fail?.should == false
   end
 end
