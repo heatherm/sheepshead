@@ -58,7 +58,14 @@ describe Player do
   describe "pick?" do
     it "should pick if the hand has four or more trump and at least one is a queen: Q♣, Q♥, J♠, J♥, A♠, 9♥" do
       player = Player.make!
-      player.hand = ["Q♣, Q♥, J♠, J♥, A♠, 9♥"]
+      player.hand = [
+          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true, trump_rank: 12}),
+          Card.new({suit: :spades, rank: :jack, value: 2, trump: true, trump_rank: 9}),
+          Card.new({suit: :hearts, rank: :jack, value: 2, trump: true, trump_rank: 8}),
+          Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
+          Card.new({suit: :hearts, rank: :nine, value: 0, trump: false})
+      ]
       player.pick?.should be_true
     end
 
