@@ -18,6 +18,11 @@ describe Game do
     it "has a round" do
       Game.make!.round.should == 1
     end
+
+    it "has a dealer" do
+      game = Game.make!
+      game.dealer.username.should == "Player 1"
+    end
   end
 
   describe "advance_round" do
