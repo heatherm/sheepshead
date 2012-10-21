@@ -16,10 +16,7 @@ describe Player do
   end
 
   describe "pick?" do
-    it "should pick if the hand is strong" do
-      #Generally, it is best not to pick up the blind unless the player has four or more trump in a five-handed game,
-      #and it is best if at least one of those trump is a queen. Picking on three trump is unwise, unless they are very
-      #highly powered cards.
+    it "should pick if the hand has four or more trump and at least one is a queen: Q♣, Q♥, J♠, J♥, A♠, 9♥" do
       player = Player.make!
       player.hand = [
           Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
@@ -32,7 +29,7 @@ describe Player do
       player.pick?.should be_true
     end
 
-    it "should not pick if the hand is weak" do
+    it "should not pick if the hand has fewer than four trump: Q♣, Q♥, J♥, A♠, 9♥, 8♥" do
       player = Player.make!
       player.hand = [
           Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
@@ -46,9 +43,6 @@ describe Player do
     end
 
     it "should not pick if trump are little: J♣, J♦, A♦, 8♦, A♠, A♥" do
-      #Don't take the blind. You have 4 trump, but they are mostly little. If you have a chronic picking problem you may pick on this.
-      #If you pass on the blind, you have a very good chance of ending up partner, since you have 2 of the 3 fail aces.
-      #This is a decent partner hand, with the trump and lots of point to "schmear" to your partner.
       player = Player.make!
       player.hand = [
           Card.new({suit: :clubs, rank: :jack, value: 2, trump: true, trump_rank: 10}),
@@ -61,8 +55,7 @@ describe Player do
       player.pick?.should be_false
     end
 
-    it "If you can forsee schneider, pick! Hand 3: Q♠, Q♥, 7♦, K♦, 10♥, 10♣" do
-      #With 20 points to bury, this wouldn't be a bad hand to pick on.
+    it "should pick if you have more than 20 or more points to bury: Q♠, Q♥, 7♦, K♦, 10♥, 10♣" do
       player = Player.make!
       player.hand = [
           Card.new({suit: :spades, rank: :queen, value: 3, trump: true, trump_rank: 13}),
@@ -75,7 +68,7 @@ describe Player do
       player.pick?.should be_true
     end
 
-    it "should pick Hand 4: Q♣, Q♦, A♦, 10♦, A♥, K♥" do
+    it "should pick if you have 15 points to bury and 4 trump: Q♣, Q♦, A♦, 10♦, A♥, K♥" do
       player = Player.make!
       player.hand = [
           Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
@@ -88,7 +81,7 @@ describe Player do
       player.pick?.should be_true
     end
 
-    it "should pick Hand 5: Q♠, Q♥, J♦, 10♦, 7♦, K♥" do
+    it "should pick with 5 trump: Q♠, Q♥, J♦, 10♦, 7♦, K♥" do
       player = Player.make!
       player.hand = [
           Card.new({suit: :spades, rank: :queen, value: 3, trump: true, trump_rank: 13}),
