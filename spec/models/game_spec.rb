@@ -20,6 +20,12 @@ describe Game do
     end
   end
 
+  describe "advance_round" do
+    it "should increment the round number by one" do
+      Game.make!.advance_round.round.should == 2
+    end
+  end
+
   describe "deal" do
     before do
       @game = Game.make!

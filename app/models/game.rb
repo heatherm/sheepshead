@@ -32,6 +32,10 @@ class Game < ActiveRecord::Base
     deal if redeal?
   end
 
+  def advance_round
+    @round += 1
+  end
+
   def redeal?
     players.each do |p|
       if !(p.has_face? || p.has_trump? || p.has_ace?)
