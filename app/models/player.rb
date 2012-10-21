@@ -35,7 +35,7 @@ class Player < ActiveRecord::Base
   end
 
   def can_bury_all_fail(fail)
-    fail.count > 2
+    fail.count > 1
   end
 
   def bury_high_value_then_low_rank(trump, bury)
