@@ -10,8 +10,8 @@ class Player < ActiveRecord::Base
   end
 
   def pick?
-    trump = @hand.select{|c| c.trump?}
-    max_points_to_bury = @hand.sort{|x, y| x.value <=> y.value }.last(2).map(&:value).sum
+    trump = @hand.select { |c| c.trump? }
+    max_points_to_bury = @hand.sort { |x, y| x.value <=> y.value }.last(2).map(&:value).sum
     num_trump = trump.count
     trump_value = 0
     trump.each do |card|
@@ -22,30 +22,48 @@ class Player < ActiveRecord::Base
 
   def bury
     bury = []
-    fail = @hand.select{ |card| card.fail? }
+    fail = @hand.select { |card| card.fail? }
     trump = @hand.select { |card| card.trump? }
-    if fail.count > 2
-      hearts = fail.select{|c| c.suit == :hearts }
-      spades = fail.select{|c| c.suit == :spades }
-      clubs = fail.select{|c| c.suit == :clubs }
-      if hearts.count == 1 && bury.count < 2
-        bury << hearts.first
-      end
-      if spades.count == 1 && bury.count < 2
-        bury << spades.first
-      end
-      if clubs.count == 1 && bury.count < 2
-        bury << clubs.first
-      end
-    elsif fail.count == 1
-      high_value_trump = trump.select {|card| card.value > 9}
-      if high_value_trump.count > 1
-        bury << high_value_trump.sort{|x, y| y.value <=> x.value }.last(2)
-      else
-        bury << trump.sort{|x, y| y.trump_rank <=> x.trump_rank}.last(2)
+
+    if can_bury_all_fail(fail)
+      bury = minimize_fail_suits(fail, bury)
+    elsif must_bury_trump(fail)
+      bury = bury_high_value_then_low_rank(trump, bury)
+    end
+
+    bury.flatten
+  end
+
+  def can_bury_all_fail(fail)
+    fail.count > 2
+  end
+
+  def bury_high_value_then_low_rank(trump, bury)
+    high_value_trump = trump.select { |card| card.value > 9 }
+    if high_value_trump.count > 1
+      bury << high_value_trump.sort { |x, y| y.value <=> x.value }.last(2)
+    else
+      bury << trump.sort { |x, y| y.trump_rank <=> x.trump_rank }.last(2)
+    end
+    bury
+  end
+
+  def must_bury_trump(fail)
+    fail.count == 1
+  end
+
+  def minimize_fail_suits(fail, bury)
+    hearts = fail.select { |c| c.suit == :hearts }
+    spades = fail.select { |c| c.suit == :spades }
+    clubs = fail.select { |c| c.suit == :clubs }
+
+    least_fail_first = [hearts, spades, clubs].sort{|x,y| x.count <=> y.count}
+    least_fail_first.each do |suit_group|
+      while bury.count < 2 && suit_group.count > 0
+        bury << suit_group.shift
       end
     end
-    bury.flatten
+    bury
   end
 
   def has_face?

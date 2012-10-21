@@ -184,5 +184,21 @@ describe Player do
       actual.should =~ ["diamonds - ace", "diamonds - ten"]
     end
 
+    it "hand: Q♠, Q♥, J♦, K♦, 10♥, 10♣, blind: 8♦, 7♣" do
+      player = Player.make!
+      player.hand = [
+          Card.new({suit: :spades, rank: :queen, value: 3, trump: true, trump_rank: 13}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true, trump_rank: 12}),
+          Card.new({suit: :diamonds, rank: :jack, value: 2, trump: true, trump_rank: 7}),
+          Card.new({suit: :diamonds, rank: :king, value: 4, trump: true, trump_rank: 4}),
+          Card.new({suit: :hearts, rank: :ten, value: 10, trump: false}),
+          Card.new({suit: :clubs, rank: :ten, value: 10, trump: false}),
+          Card.new({suit: :diamonds, rank: :eight, value: 0, trump: true, trump_rank: 2}),
+          Card.new({suit: :clubs, rank: :seven, value: 0, trump: false})
+      ]
+      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual.should =~ ["hearts - ten", "clubs - ten"]
+    end
+
   end
 end
