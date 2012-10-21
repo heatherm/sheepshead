@@ -28,7 +28,7 @@ class Player < ActiveRecord::Base
     if can_bury_all_fail(fail)
       bury = minimize_fail_suits(fail, bury)
     elsif must_bury_trump(fail)
-      bury = bury_high_value_then_low_rank(trump, bury)
+      bury = bury_high_value_then_low_rank(trump, fail, bury)
     end
 
     bury.flatten
@@ -38,18 +38,24 @@ class Player < ActiveRecord::Base
     fail.count > 1
   end
 
-  def bury_high_value_then_low_rank(trump, bury)
+  def bury_high_value_then_low_rank(trump, fail, bury)
     high_value_trump = trump.select { |card| card.value > 9 }
     if high_value_trump.count > 1
       bury << high_value_trump.sort { |x, y| y.value <=> x.value }.last(2)
-    else
-      bury << trump.sort { |x, y| y.trump_rank <=> x.trump_rank }.last(2)
+    elsif fail.count > 0
+      while fail.count > 0 && bury.count < 2
+        bury << fail.shift
+      end
+      lowest_ranked_trump_first = trump.sort { |x, y| x.trump_rank <=> y.trump_rank }
+      while lowest_ranked_trump_first.count > 0 && bury.count < 2
+        bury << lowest_ranked_trump_first.shift
+      end
     end
     bury
   end
 
   def must_bury_trump(fail)
-    fail.count == 1
+    fail.count < 2
   end
 
   def minimize_fail_suits(fail, bury)

@@ -128,7 +128,7 @@ describe Player do
           Card.new({suit: :hearts, rank: :queen, value: 3, trump: true, trump_rank: 12}),
           Card.new({suit: :diamonds, rank: :jack, value: 2, trump: true, trump_rank: 7}),
           Card.new({suit: :diamonds, rank: :ten, value: 10, trump: true, trump_rank: 5}),
-          Card.new({suit: :hearts, rank: :ace, value: 11, trump: false}),
+          Card.new({suit: :diamonds, rank: :seven, value: 0, trump: true, trump_rank: 1}),
           Card.new({suit: :hearts, rank: :king, value: 4, trump: false})
       ]
       player.pick?.should be_true
@@ -152,7 +152,7 @@ describe Player do
       actual.should =~ ["spades - eight", "clubs - eight"]
     end
     
-    it "should keep at least one fail if it has one" do
+    it "should go trump solid if possible" do
       player = Player.make!
       player.hand = [
           Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
@@ -165,7 +165,7 @@ describe Player do
           Card.new({suit: :clubs, rank: :eight, value: 0, trump: false})
       ]
       actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
-      actual.should =~ ["hearts - jack", "spades - jack"]
+      actual.should =~ ["hearts - jack", "clubs - eight"]
     end
 
     it "if you have high trump and a lot of them, you should try to bury points" do
@@ -214,6 +214,22 @@ describe Player do
       ]
       actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["hearts - ace", "hearts - king"]
+    end
+
+    it "hand: Q♠, Q♥, J♦, 10♦, 7♦, K♥, blind: Q♣, J♠" do
+      player = Player.make!
+      player.hand = [
+          Card.new({suit: :spades, rank: :queen, value: 3, trump: true, trump_rank: 13}),
+          Card.new({suit: :hearts, rank: :queen, value: 3, trump: true, trump_rank: 12}),
+          Card.new({suit: :diamonds, rank: :jack, value: 2, trump: true, trump_rank: 7}),
+          Card.new({suit: :diamonds, rank: :ten, value: 10, trump: true, trump_rank: 5}),
+          Card.new({suit: :diamonds, rank: :seven, value: 0, trump: true, trump_rank: 1}),
+          Card.new({suit: :hearts, rank: :king, value: 4, trump: false}),
+          Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
+          Card.new({suit: :spades, rank: :jack, value: 2, trump: true, trump_rank: 9})
+      ]
+      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual.should =~ ["diamonds - seven", "hearts - king"]
     end
 
   end
