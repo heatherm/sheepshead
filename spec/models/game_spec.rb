@@ -14,6 +14,10 @@ describe Game do
     it "should have a shuffled deck" do
       Game.make!.cards.first.should_not == Deck.data.first
     end
+
+    it "has a round" do
+      Game.make!.round.should == 1
+    end
   end
 
   describe "deal" do

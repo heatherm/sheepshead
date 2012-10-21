@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  attr_accessor :deck, :blind, :players
+  attr_accessor :deck, :blind, :players, :round
 
   has_many :game_players
   has_many :players, through: :game_players
@@ -21,6 +21,7 @@ class Game < ActiveRecord::Base
       game_player.player = player
       game_player.save!
     end
+    @round = 1
     cards.shuffle!
   end
 
