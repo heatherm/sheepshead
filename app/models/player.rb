@@ -16,6 +16,7 @@ class Player < ActiveRecord::Base
       @hand.flatten
       self.bury
     end
+    game.next_turn
   end
 
   def should_pick?

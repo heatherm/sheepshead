@@ -8,12 +8,34 @@ class Game < ActiveRecord::Base
 
   def initialize(attributes = nil)
     super(attributes)
-    @deck = Deck.new
-    @blind = []
+    set_round_and_turn_number
+    make_players
+    assign_player_roles
+    deal
+
+    start_game_play
+  end
+
+  def start_game_play
+    turn.go!(self)
+  end
+
+  def assign_player_roles
+    @dealer = players.first
+    @turn = players[turn_number + 1]
+    @user = players.sample
+  end
+
+  def set_round_and_turn_number
+    @round = 1
+    @turn_number = 0
+  end
+
+  def make_players
     @players = []
     5.times do |i|
       player = Player.new
-      player.username = "Player #{i +1 }"
+      player.username = "Player #{i + 1}"
       player.save!
       @players << player
       game_player = GamePlayer.new
@@ -21,27 +43,19 @@ class Game < ActiveRecord::Base
       game_player.player = player
       game_player.save!
     end
-    @round = 1
-    @dealer = @players.first
-    @turn_number = 1
-    @turn = @players[@turn_number]
-    @user = @players.sample
-    cards.shuffle!
-    self.deal
-    @turn.go!(self)
+    @players
   end
 
-  def deal
-    deal_three_to_each_player
-    deal_blind
-    deal_three_to_each_player
-    deal if redeal?
+  def next_turn
+    @turn_number += 1
+    @turn = players[turn_number % players.count]
+    @turn.go!(self)
   end
 
   def advance_round
     @round += 1
     change_dealer = false
-    @players.each do |player|
+    players.each do |player|
       if change_dealer == true
         @dealer = player
         break
@@ -53,13 +67,13 @@ class Game < ActiveRecord::Base
     self
   end
 
-  def redeal?
-    players.each do |p|
-      if !(p.has_face? || p.has_trump? || p.has_ace?)
-        return true
-      end
-    end
-    false
+  def deal
+    @deck = Deck.new
+    cards.shuffle!
+    deal_three_to_each_player
+    deal_blind
+    deal_three_to_each_player
+    deal if redeal_needed?
   end
 
   def deal_three_to_each_player
@@ -70,8 +84,18 @@ class Game < ActiveRecord::Base
   end
 
   def deal_blind
+    @blind = []
     blind << deck.cards.pop(2)
     blind.flatten!
+  end
+
+  def redeal_needed?
+    players.each do |p|
+      if !(p.has_face? || p.has_trump? || p.has_ace?)
+        return true
+      end
+    end
+    false
   end
 
 end

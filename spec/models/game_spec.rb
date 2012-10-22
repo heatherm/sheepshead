@@ -2,42 +2,49 @@ require 'spec_helper'
 
 describe Game do
   describe "relations" do
+    before do
+      Game.any_instance.stub(:start_game_play)
+      @game = Game.make!
+    end
+
     it "has a deck" do
-      game = Game.make
-      game.deck.should_not be_nil
+      @game.deck.should_not be_nil
     end
 
     it "has 5 players" do
-      Game.make!.players.count.should == 5
+      @game.players.count.should == 5
     end
 
     it "should have a shuffled deck" do
-      Game.make!.cards.first.should_not == Deck.data.first
+      @game.cards.first.should_not == Deck.data.first
     end
 
     it "has a round" do
-      Game.make!.round.should == 1
+      @game.round.should == 1
     end
 
     it "has a dealer" do
-      game = Game.make!
-      game.dealer.username.should == "Player 1"
+      @game.dealer.username.should == "Player 1"
     end
 
     it "has a user" do
-      Game.make!.user.should_not be_nil
+      @game.user.should_not be_nil
     end
 
     it "has a turn" do
-      Game.make!.turn.username.should == "Player 2"
+      @game.turn.username.should == "Player 2"
     end
 
     it "has a turn number" do
-      Game.make!.turn_number.should == 1
+      @game.turn_number.should == 0
     end
   end
 
   describe "advance_round" do
+    before do
+      Game.any_instance.stub(:start_game_play)
+    end
+
     it "should increment the round number by one" do
       Game.make!.advance_round.round.should == 2
     end
@@ -49,9 +56,8 @@ describe Game do
 
   describe "deal" do
     before do
+      Game.any_instance.stub(:start_game_play)
       @game = Game.make!
-      @game.players[@game.turn_number].stub(:go!)
-      @game.deal
     end
 
     it "should deal 6 cards to 5 players" do
@@ -66,7 +72,9 @@ describe Game do
 
     it "should redeal if deal was bad" do
       game = Game.make!
-      game.stub(:redeal?).and_return(true)
+      game.stub(:deal_three_to_each_player)
+      game.stub(:deal_blind)
+      game.stub(:redeal_needed?).and_return(true)
       game.should_receive(:deal).once
       game.deal
     end
@@ -78,7 +86,7 @@ describe Game do
           @game.players.each do |p|
             p.hand = []
           end
-          @game.redeal?.should be_true
+          @game.redeal_needed?.should be_true
         end
       end
     end

@@ -3,6 +3,10 @@ require 'spec_helper'
 
 describe Player do
   describe "relations" do
+    before do
+      Game.any_instance.stub(:start_game_play)
+    end
+
     it "games" do
       game = Game.make!
       game.players.first.games.first.should == game
@@ -234,11 +238,16 @@ describe Player do
   end
 
   describe "go!" do
+    before do
+      Game.any_instance.stub(:start_game_play)
+    end
+
     it "should allow the player to pick & bury" do
       game = Game.make!
       player = game.players.first
       player.should_receive(:should_pick?).and_return(true)
       player.should_receive(:bury)
+      game.should_receive(:next_turn)
       player.go!(game)
     end
   end
