@@ -66,7 +66,7 @@ describe Player do
           Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
           Card.new({suit: :hearts, rank: :nine, value: 0, trump: false})
       ]
-      player.pick?.should be_true
+      player.should_pick?.should be_true
     end
 
     it "should not pick if the hand has fewer than four trump: Q♣, Q♥, J♥, A♠, 9♥, 8♥" do
@@ -79,7 +79,7 @@ describe Player do
           Card.new({suit: :hearts, rank: :nine, value: 0, trump: false}),
           Card.new({suit: :hearts, rank: :eight, value: 0, trump: false})
       ]
-      player.pick?.should be_false
+      player.should_pick?.should be_false
     end
 
     it "should not pick if trump are little: J♣, J♦, A♦, 8♦, A♠, A♥" do
@@ -92,7 +92,7 @@ describe Player do
           Card.new({suit: :spades, rank: :ace, value: 11, trump: false}),
           Card.new({suit: :hearts, rank: :ace, value: 11, trump: false})
       ]
-      player.pick?.should be_false
+      player.should_pick?.should be_false
     end
 
     it "should pick if you have more than 20 or more points to bury: Q♠, Q♥, 7♦, K♦, 10♥, 10♣" do
@@ -105,7 +105,7 @@ describe Player do
           Card.new({suit: :hearts, rank: :ten, value: 10, trump: false}),
           Card.new({suit: :clubs, rank: :ten, value: 10, trump: false})
       ]
-      player.pick?.should be_true
+      player.should_pick?.should be_true
     end
 
     it "should pick if you have 15 points to bury and 4 trump: Q♣, Q♦, A♦, 10♦, A♥, K♥" do
@@ -118,7 +118,7 @@ describe Player do
           Card.new({suit: :hearts, rank: :ace, value: 11, trump: false}),
           Card.new({suit: :hearts, rank: :king, value: 4, trump: false})
       ]
-      player.pick?.should be_true
+      player.should_pick?.should be_true
     end
 
     it "should pick with 5 trump: Q♠, Q♥, J♦, 10♦, 7♦, K♥" do
@@ -131,7 +131,7 @@ describe Player do
           Card.new({suit: :diamonds, rank: :seven, value: 0, trump: true, trump_rank: 1}),
           Card.new({suit: :hearts, rank: :king, value: 4, trump: false})
       ]
-      player.pick?.should be_true
+      player.should_pick?.should be_true
     end
   end
 
@@ -231,6 +231,15 @@ describe Player do
       actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["diamonds - seven", "hearts - king"]
     end
+  end
 
+  describe "go!" do
+    it "should allow the player to pick & bury" do
+      game = Game.make!
+      player = game.players.first
+      player.should_receive(:should_pick?).and_return(true)
+      player.should_receive(:bury)
+      player.go!(game)
+    end
   end
 end

@@ -27,6 +27,11 @@ describe Game do
     it "has a user" do
       Game.make!.user.should_not be_nil
     end
+
+    it "has a turn" do
+      Game.make!.turn.username.should == "Player 2"
+    end
+
   end
 
   describe "advance_round" do
@@ -46,6 +51,7 @@ describe Game do
     end
 
     it "should deal 6 cards to 5 players" do
+      @game.players[1].stub(:go!)
       @game.players.each do |p|
         p.hand.count.should == 6
       end

@@ -9,7 +9,16 @@ class Player < ActiveRecord::Base
     @hand = []
   end
 
-  def pick?
+  def go!(game)
+    if self.should_pick?
+      @hand << game.blind.shift
+      @hand << game.blind.shift
+      @hand.flatten
+      self.bury
+    end
+  end
+
+  def should_pick?
     trump = @hand.select { |c| c.trump? }
     max_points_to_bury = @hand.sort { |x, y| x.value <=> y.value }.last(2).map(&:value).sum
     num_trump = trump.count
