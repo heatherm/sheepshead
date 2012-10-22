@@ -35,6 +35,17 @@ class Game < ActiveRecord::Base
 
   def advance_round
     @round += 1
+    change_dealer = false
+    @players.each do |player|
+      if change_dealer == true
+        @dealer = player
+        break
+      end
+      if player == @dealer
+        change_dealer = true
+      end
+    end
+    self
   end
 
   def redeal?

@@ -29,6 +29,10 @@ describe Game do
     it "should increment the round number by one" do
       Game.make!.advance_round.round.should == 2
     end
+
+    it "should change the dealer" do
+      Game.make!.advance_round.dealer.username.should == "Player 2"
+    end
   end
 
   describe "deal" do
