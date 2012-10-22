@@ -23,6 +23,10 @@ describe Game do
       game = Game.make!
       game.dealer.username.should == "Player 1"
     end
+
+    it "has a user" do
+      Game.make!.user.should_not be_nil
+    end
   end
 
   describe "advance_round" do

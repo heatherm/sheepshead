@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  attr_accessor :deck, :blind, :players, :round, :dealer
+  attr_accessor :deck, :blind, :players, :round, :dealer, :user
 
   has_many :game_players
   has_many :players, through: :game_players
@@ -23,7 +23,9 @@ class Game < ActiveRecord::Base
     end
     @round = 1
     @dealer = @players.first
+    @user = @players.sample
     cards.shuffle!
+    self.deal
   end
 
   def deal
