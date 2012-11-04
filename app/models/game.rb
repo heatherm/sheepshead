@@ -56,16 +56,20 @@ class Game < ActiveRecord::Base
   def make_players
     @players = []
     5.times do |i|
-      player = Player.new
-      player.username = "Player #{i + 1}"
-      player.save!
-      @players << player
-      game_player = GamePlayer.new
-      game_player.game = self
-      game_player.player = player
-      game_player.save!
+      @players << make_player(i)
     end
     @players
+  end
+
+  def make_player(i)
+    player = Player.new
+    player.username = "Player #{i + 1}"
+    player.save!
+    game_player = GamePlayer.new
+    game_player.game = self
+    game_player.player = player
+    game_player.save!
+    player
   end
 
   def next_turn
