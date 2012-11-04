@@ -12,11 +12,10 @@ class Player < ActiveRecord::Base
 
   def go!(game)
     play_card
-    game.next_turn
+  #  game.next_turn
   end
 
   def play_card
-
   end
 
   def should_pick?

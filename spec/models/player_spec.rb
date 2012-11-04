@@ -237,17 +237,23 @@ describe Player do
     end
   end
 
-  describe "go!" do
-    before do
-      Game.any_instance.stub(:start_game_play)
-    end
-
-    it "should have a player lay down a card" do
-      game = Game.make!
-      player = game.players.first
-      player.should_receive(:play_card)
-      game.should_receive(:next_turn)
-      player.go!(game)
-    end
-  end
+  #describe "go!" do
+  #  before do
+  #    Game.any_instance.stub(:start_game_play)
+  #  end
+  #
+  #  it "should have a player lay down a card" do
+  #    game = Game.make!
+  #    player = game.players.first
+  #    player.should_receive(:play_card)
+  #    game.should_receive(:next_turn)
+  #    player.go!(game)
+  #  end
+  #end
+  #
+  #describe "play_card" do
+  #  it "should take a card unless its the user" do
+  #
+  #  end
+  #end
 end
