@@ -1,5 +1,5 @@
 class Player < ActiveRecord::Base
-  attr_accessor :hand
+  attr_accessor :hand, :won_cards
 
   has_many :game_players
   has_many :games, through: :game_players
@@ -7,16 +7,16 @@ class Player < ActiveRecord::Base
   def initialize(attributes = nil)
     super(attributes)
     @hand = []
+    @won_cards = []
   end
 
   def go!(game)
-    if self.should_pick?
-      @hand << game.blind.shift
-      @hand << game.blind.shift
-      @hand.flatten
-      self.bury
-    end
+    play_card
     game.next_turn
+  end
+
+  def play_card
+
   end
 
   def should_pick?
@@ -30,7 +30,7 @@ class Player < ActiveRecord::Base
     (num_trump > 3 && trump_value > 33) || (trump_value > 29 && max_points_to_bury > 19)
   end
 
-  def bury
+  def pick_cards_to_bury
     bury = []
     fail = @hand.select { |card| card.fail? }
     trump = @hand.select { |card| card.trump? }
@@ -41,7 +41,9 @@ class Player < ActiveRecord::Base
       bury = bury_high_value_then_low_rank(trump, fail, bury)
     end
 
-    bury.flatten
+    won_cards << bury.shift
+    won_cards << bury.shift
+    won_cards.flatten
   end
 
   def can_bury_all_fail(fail)
@@ -49,10 +51,14 @@ class Player < ActiveRecord::Base
   end
 
   def bury_high_value_then_low_rank(trump, fail, bury)
-    high_value_trump = trump.select { |card| card.value > 9 }
-    if high_value_trump.count > 1
-      bury << high_value_trump.sort { |x, y| y.value <=> x.value }.last(2)
-    elsif fail.count > 0
+    high_value_trump, other = trump.partition { |card| card.value > 9 }
+    if high_value_trump.count > 1 && other.count > 4
+      high_value_trump.sort! { |x, y| y.value <=> x.value }
+      while high_value_trump.count > 0 && bury.count < 2
+        bury << high_value_trump.shift
+      end
+    end
+    if fail.count > 0
       while fail.count > 0 && bury.count < 2
         bury << fail.shift
       end
@@ -74,7 +80,7 @@ class Player < ActiveRecord::Base
     clubs = fail.select { |c| c.suit == :clubs }
 
     least_fail_first = [hearts, spades, clubs].sort{|x,y| x.count <=> y.count}
-    least_fail_first.each do |suit_group|
+    least_fail_first.compact.each do |suit_group|
       while bury.count < 2 && suit_group.count > 0
         bury << suit_group.shift
       end

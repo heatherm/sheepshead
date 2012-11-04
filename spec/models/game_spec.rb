@@ -38,6 +38,10 @@ describe Game do
     it "has a turn number" do
       @game.turn_number.should == 0
     end
+
+    it "has a picker" do
+      @game.picker.should_not be_nil
+    end
   end
 
   describe "advance_round" do
@@ -60,7 +64,9 @@ describe Game do
       @game = Game.make!
     end
 
-    it "should deal 6 cards to 5 players" do
+    it "should deal 6 cards to 5 players no matter how many deals" do
+      @game.deal
+      @game.deal
       @game.players.each do |p|
         p.hand.count.should == 6
       end
@@ -72,23 +78,32 @@ describe Game do
 
     it "should redeal if deal was bad" do
       game = Game.make!
-      game.stub(:deal_three_to_each_player)
-      game.stub(:deal_blind)
-      game.stub(:redeal_needed?).and_return(true)
-      game.should_receive(:deal).once
+      game.should_receive(:empty_player_hands_and_blind)
+      game.should_receive(:deal_three_to_each_player).twice
+      game.should_receive(:deal_blind)
+      game.should_receive(:redeal_needed?).once.and_return(false)
       game.deal
     end
 
-    context "redeal" do
-      describe "redeal?" do
-
-        it "should redeal when a player's hand has no aces, no face cards and no trump" do
-          @game.players.each do |p|
-            p.hand = []
-          end
-          @game.redeal_needed?.should be_true
+    describe "redeal_needed?" do
+      it "should redeal when a player's hand has no aces, no face cards and no trump" do
+        @game.players.each do |p|
+          p.hand = []
         end
+        @game.redeal_needed?.should be_true
       end
+    end
+  end
+
+  describe "find_a_picker" do
+    before do
+      Game.any_instance.stub(:start_game_play)
+      @game = Game.make!
+    end
+
+    it "should assign a player as picker" do
+      @game.find_a_picker
+      @game.picker.should_not be_nil
     end
   end
 end

@@ -152,7 +152,7 @@ describe Player do
           Card.new({suit: :spades, rank: :eight, value: 0, trump: false}),
           Card.new({suit: :clubs, rank: :eight, value: 0, trump: false})
       ]
-      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual = player.pick_cards_to_bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["spades - eight", "clubs - eight"]
     end
     
@@ -168,11 +168,11 @@ describe Player do
           Card.new({suit: :hearts, rank: :jack, value: 2, trump: true, trump_rank: 8}),
           Card.new({suit: :clubs, rank: :eight, value: 0, trump: false})
       ]
-      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual = player.pick_cards_to_bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["hearts - jack", "clubs - eight"]
     end
 
-    it "if you have high trump and a lot of them, you should try to bury points" do
+    it "if you have several high value trump, you should try to bury points" do
       player = Player.make!
       player.hand = [
           Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
@@ -184,7 +184,7 @@ describe Player do
           Card.new({suit: :diamonds, rank: :seven, value: 0, trump: true, trump_rank: 1}),
           Card.new({suit: :clubs, rank: :eight, value: 0, trump: false})
       ]
-      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual = player.pick_cards_to_bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["diamonds - ace", "diamonds - ten"]
     end
 
@@ -200,7 +200,7 @@ describe Player do
           Card.new({suit: :diamonds, rank: :eight, value: 0, trump: true, trump_rank: 2}),
           Card.new({suit: :clubs, rank: :seven, value: 0, trump: false})
       ]
-      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual = player.pick_cards_to_bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["hearts - ten", "clubs - ten"]
     end
 
@@ -216,7 +216,7 @@ describe Player do
           Card.new({suit: :clubs, rank: :jack, value: 2, trump: true, trump_rank: 10}),
           Card.new({suit: :diamonds, rank: :king, value: 4, trump: true, trump_rank: 4})
       ]
-      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual = player.pick_cards_to_bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["hearts - ace", "hearts - king"]
     end
 
@@ -232,7 +232,7 @@ describe Player do
           Card.new({suit: :clubs, rank: :queen, value: 3, trump: true, trump_rank: 14}),
           Card.new({suit: :spades, rank: :jack, value: 2, trump: true, trump_rank: 9})
       ]
-      actual = player.bury.map{|card| "#{card.suit} - #{card.rank}"}
+      actual = player.pick_cards_to_bury.map{|card| "#{card.suit} - #{card.rank}"}
       actual.should =~ ["diamonds - seven", "hearts - king"]
     end
   end
@@ -242,11 +242,10 @@ describe Player do
       Game.any_instance.stub(:start_game_play)
     end
 
-    it "should allow the player to pick & bury" do
+    it "should have a player lay down a card" do
       game = Game.make!
       player = game.players.first
-      player.should_receive(:should_pick?).and_return(true)
-      player.should_receive(:bury)
+      player.should_receive(:play_card)
       game.should_receive(:next_turn)
       player.go!(game)
     end
