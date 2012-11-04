@@ -11,13 +11,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121011033919) do
+ActiveRecord::Schema.define(:version => 20121104215623) do
+
+  create_table "buries", :force => true do |t|
+    t.integer  "card_one_id"
+    t.integer  "card_two_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "cards", :force => true do |t|
+    t.string  "suit"
+    t.string  "rank"
+    t.integer "value"
+    t.boolean "trump"
+    t.integer "trump_rank"
+  end
 
   create_table "game_players", :force => true do |t|
     t.integer  "game_id"
     t.integer  "player_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.boolean  "picker"
+    t.boolean  "partner"
   end
 
   create_table "games", :force => true do |t|
@@ -25,8 +42,42 @@ ActiveRecord::Schema.define(:version => 20121011033919) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "hands", :force => true do |t|
+    t.integer  "game_player_id"
+    t.integer  "card_one_id"
+    t.integer  "card_two_id"
+    t.integer  "card_three_id"
+    t.integer  "card_four_id"
+    t.integer  "card_five_id"
+    t.integer  "card_six_id"
+    t.integer  "trick_id"
+    t.integer  "position"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "players", :force => true do |t|
     t.string   "username"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "plays", :force => true do |t|
+    t.integer  "trick_id"
+    t.integer  "game_player_id"
+    t.integer  "card_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "tricks", :force => true do |t|
+    t.integer  "game_id"
+    t.integer  "winner_id"
+    t.integer  "play_one"
+    t.integer  "play_two"
+    t.integer  "play_three"
+    t.integer  "play_four"
+    t.integer  "play_five"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
