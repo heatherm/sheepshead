@@ -13,6 +13,7 @@ end
 group :test, :development do
   gem 'rspec-rails', '~> 2.0'
   gem 'machinist', '>= 2.0.0.beta2'
+  gem 'specjour'
 end
 
 gem 'jquery-rails'
