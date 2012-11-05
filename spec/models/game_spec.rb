@@ -2,18 +2,10 @@ require 'spec_helper'
 
 describe Game do
   describe "relations" do
-    #before do
-    #  @player_one = Player.make
-    #  @player_two = Player.make
-    #  @game = Game.make
-    #  @gp_one = GamePlayer.make(game: @game, player: @player_one)
-    #  @gp_two = GamePlayer.make(game: @game, player: @player_two)
-    #  #@trick = Trick.make(game: @game)
-    #end
-    #
-    #it "players" do
-    #  @game.players.should =~ [@player_one, @player_two]
-    #end
+
+    it "players" do
+      Game.make!.players.should_not be_nil
+    end
 
     #it "tricks" do
     #  @game.tricks.should =~ [@trick]

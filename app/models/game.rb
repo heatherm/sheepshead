@@ -1,6 +1,6 @@
 class Game < ActiveRecord::Base
   has_many :game_players
-  has_many :games, through: :game_players
+  has_many :players, through: :game_players
 
   after_create :create_players
 
