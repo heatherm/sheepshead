@@ -15,8 +15,8 @@ describe Game do
   describe "creation" do
     it "should create 5 players" do
       Game.make!
-      #Player.count.should == 5
-      #GamePlayer.count.should == 5
+      Player.count.should == 5
+      GamePlayer.count.should == 5
     end
   end
   #describe "advance_round" do

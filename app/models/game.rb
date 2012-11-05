@@ -6,7 +6,8 @@ class Game < ActiveRecord::Base
 
   def create_players
     5.times do |i|
-      Player.create!(username: "Player #{0 + 1}")
+      p = Player.create!(username: "Player #{i + 1}")
+      GamePlayer.create!(player: p, game: self)
     end
   end
 
