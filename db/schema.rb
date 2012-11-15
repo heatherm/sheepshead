@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121104215623) do
+ActiveRecord::Schema.define(:version => 20121115031825) do
 
   create_table "buries", :force => true do |t|
     t.integer  "card_one_id"

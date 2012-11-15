@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-describe Scoreboard do
-
+describe Trick do
 
 end
