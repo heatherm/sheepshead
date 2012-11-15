@@ -1,4 +1,3 @@
 Sheepshead::Application.routes.draw do
-  resources :game
-  root to: "game#home"
+  root to: "welcome#show"
 end
