@@ -52,7 +52,7 @@ class Views::Welcome::Show < Views::Layouts::Page
       div.card style: "left:4em;top:.25em;" do
         div.front do
           div.index do
-            p "J"
+            rawtext "J"
             br
             rawtext "&spades;"
           end
@@ -69,7 +69,7 @@ class Views::Welcome::Show < Views::Layouts::Page
       div.card style: "left:7em;top:0em;" do
         div.front do
           div.index do
-            p "Q"
+            rawtext "Q"
             br
             rawtext "&spades;"
           end
@@ -86,7 +86,7 @@ class Views::Welcome::Show < Views::Layouts::Page
       div.card style: "left:10em;top:.25em;" do
         div.front do
           div.index do
-            p "K"
+            rawtext "K"
             br
             rawtext "&spades;"
           end
@@ -103,7 +103,7 @@ class Views::Welcome::Show < Views::Layouts::Page
       div.card style: "left:13em;top:.5em;" do
         div.front do
           div.index do
-            p "A"
+            rawtext "A"
             br
             rawtext "&spades;"
           end
