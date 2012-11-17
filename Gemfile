@@ -16,6 +16,7 @@ group :test, :development do
   gem 'specjour'
   gem 'database_cleaner'
   gem 'guard-livereload'
+  gem 'rack-livereload'
 end
 
 gem 'jquery-rails'
