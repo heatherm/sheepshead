@@ -41,6 +41,8 @@ end
 
 Player.blueprint do
   username { "user#{sn}" }
+  email {"foo@exmaple.com"}
+  password {"admin22"}
 end
 
 Trick.blueprint do
