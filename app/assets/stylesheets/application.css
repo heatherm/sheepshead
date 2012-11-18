@@ -78,8 +78,8 @@ body {
   height: 4.0em;
 }
 .footer {
-    position: absolute;
-    width: 300px;
-    left: 10px;
-    bottom:10px;
+    position:absolute;
+    width:300px;
+    left:5px;
+    bottom:0px;
 }
