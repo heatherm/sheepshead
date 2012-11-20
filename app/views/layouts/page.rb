@@ -21,8 +21,6 @@ class Views::Layouts::Page < Erector::Widget
   end
 
   def footer
-    div.footer do
-      p "Copyright (c) 2012, Heather Moore"
-    end
+    p "Copyright (c) 2112, Rush Enterprises Inc."
   end
 end

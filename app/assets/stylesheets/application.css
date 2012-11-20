@@ -12,8 +12,25 @@
  *= require_tree .
  */
 
-body {
+* {
+	margin: 0;
+}
+html, body {
+	height: 100%;
+}
+
+body  {
     background-image: url("background.png");
+}
+
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
+}
+.footer, .push {
+	height: 142px; /* .push must be the same height as .footer */
 }
 
 .card {
@@ -76,10 +93,4 @@ body {
   top:  0.45em;
   width:  2.6em;
   height: 4.0em;
-}
-.footer {
-    position:absolute;
-    width:300px;
-    left:5px;
-    bottom:0px;
 }
