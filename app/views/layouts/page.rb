@@ -6,8 +6,17 @@ class Views::Layouts::Page < Erector::Widget
         css "assets/application.css"
       }
       body {
-        div.main {
-          main
+        div.container {
+          div.page_header {
+            h1 "Sheepshead"
+            p.lead {
+              header
+            }
+          }
+          div.main {
+            main
+          }
+          div.push
         }
         div.footer {
           footer
@@ -20,7 +29,16 @@ class Views::Layouts::Page < Erector::Widget
     p "This page intentionally left blank."
   end
 
+  def header
+    "Can you beat 4 computers in a game of 5-handed?"
+  end
+
   def footer
-    p "Copyright (c) 2112, Rush Enterprises Inc."
+    div.container do
+      p.muted.credit do
+        text "Copyright (c) 2012, "
+        a "Heather Moore", href: "http://www.heathrmoor.com"
+      end
+    end
   end
 end

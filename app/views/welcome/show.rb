@@ -1,11 +1,16 @@
 #encoding utf-8
 class Views::Welcome::Show < Views::Layouts::Page
+  def initialize(attr={})
+    super(page_title: "Start")
+  end
+
+  def header
+    div "Start Playing!", class: 'btn btn-large btn-info'
+  end
+
   def main
     div.row do
       div.span9 do
-        div do
-          h1 "Welcome to Sheepshead Online"
-        end
         ["spades", "hearts", "diamonds", "clubs"].each do |suit|
           div.cardBlock style: "position: relative; height:10em;" do
             positions = [
