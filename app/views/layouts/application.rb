@@ -1,4 +1,4 @@
-class Views::Layouts::Page < Erector::Widget
+class Views::Layouts::Application < Erector::Widget
   def content
     html {
       head {

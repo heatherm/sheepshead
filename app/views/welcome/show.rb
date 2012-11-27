@@ -1,11 +1,13 @@
 #encoding utf-8
-class Views::Welcome::Show < Views::Layouts::Page
+class Views::Welcome::Show < Views::Layouts::Application
   def initialize(attr={})
     super(page_title: "Start")
   end
 
   def header
-    div "Start Playing!", class: 'btn btn-large btn-info'
+    div class: 'btn btn-large btn-info' do
+      link_to "Start Playing!", start_path
+    end
   end
 
   def main
