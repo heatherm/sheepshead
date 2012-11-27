@@ -1,56 +1,61 @@
 class GameController < ApplicationController
   def show
-    @foo = "foo"
-    find_game
-    render text: Views::Game::Show.new(foo: @foo).to_s
+    game = find_game
+    game_player_ids = GamePlayer.find_all_by_game_id(game.id).map(&:id)
+    @hands = Hand.find_all_by_game_player_id(game_player_ids)
+    @bury = Bury.find_by_game_id(game.id)
   end
 
   def find_game
     if game_id = session && session[:game_id]
-      @game = Game.find(game_id)
+      game = Game.find(game_id)
     else
-      @game = new_game
-      session[:game_id] = @game.id
+      game = create_new_game
+      session[:game_id] = game.id
+    end
+    game
+  end
+
+  def create_new_game
+    @game = Game.create
+    shuffled_deck = Card.all.shuffle
+
+    players = create_players
+    game_players = create_game_players(players)
+
+    create_hands(game_players, shuffled_deck)
+
+    Bury.create(card_one_id: shuffled_deck.shift.id, card_two_id: shuffled_deck.shift.id, game_id: @game.id)
+
+    trick1 = Trick.create(game_id: @game.id)
+    Play.create(trick_id: trick1.id, game_player_id: game_players.first.id)
+    @game
+  end
+
+  def create_hands(game_players, shuffled_deck)
+    game_players.each_with_index do |game_player, index|
+      Hand.create(game_player_id: game_player.id, card_one_id: shuffled_deck.shift.id, card_two_id: shuffled_deck.shift.id,
+                          card_three_id:shuffled_deck.shift.id, card_four_id:shuffled_deck.shift.id, card_five_id:shuffled_deck.shift.id,
+                          card_six_id: shuffled_deck.shift.id, position: index)
     end
   end
 
-  def new_game
-    game = Game.create
+  def create_game_players(players)
+    game_players = []
+    players.each do |player|
+      game_player = GamePlayer.create(game_id: @game.id, player_id: player.id)
+      game_players << game_player
+    end
+    game_players
+  end
+
+  def create_players
+    players = []
     time = Time.now.to_i
-
-    @player1 = Player.create(username: "Player1#{time}")
-    #@player2 = Player.create(username: "Player2#{time}")
-    #@player3 = Player.create(username: "Player3#{time}")
-    #@player4 = Player.create(username: "Player4#{time}")
-    #@player5 = Player.create(username: "Player5#{time}")
-    #
-    @game_player1 = GamePlayer.create(game: game, player: @player1)
-    #@game_player2 = GamePlayer.create(game: game, player: @player2)
-    #@game_player3 = GamePlayer.create(game: game, player: @player3)
-    #@game_player4 = GamePlayer.create(game: game, player: @player4)
-    #@game_player5 = GamePlayer.create(game: game, player: @player5)
-
-    shuffled_deck = Card.all.shuffle
-
-    @hand1 = Hand.create(game_player_id: @game_player1.id, card_one_id: shuffled_deck.shift.id, card_two_id: shuffled_deck.shift.id,
-                        card_three_id:shuffled_deck.shift.id, card_four_id:shuffled_deck.shift.id, card_five_id:shuffled_deck.shift.id,
-                        card_six_id: shuffled_deck.shift.id, position: 1)
-    #@hand2 = Hand.create(game_player: @game_player2, card_one: shuffled_deck.shift, card_two: shuffled_deck.shift,
-    #                    card_three:shuffled_deck.shift, card_four:shuffled_deck.shift, card_five:shuffled_deck.shift,
-    #                    card_six: shuffled_deck.shift,position: 2)
-    #@hand3 = Hand.create(game_player: @game_player3, card_one: shuffled_deck.shift, card_two: shuffled_deck.shift,
-    #                    card_three:shuffled_deck.shift, card_four:shuffled_deck.shift, card_five:shuffled_deck.shift,
-    #                    card_six: shuffled_deck.shift,position: 3)
-    #@hand4 = Hand.create(game_player: @game_player4, card_one: shuffled_deck.shift, card_two: shuffled_deck.shift,
-    #                    card_three:shuffled_deck.shift, card_four:shuffled_deck.shift, card_five:shuffled_deck.shift,
-    #                    card_six: shuffled_deck.shift, position: 4)
-    #@hand5 = Hand.create(game_player: @game_player5, card_one: shuffled_deck.shift, card_two: shuffled_deck.shift,
-    #                    card_three:shuffled_deck.shift, card_four:shuffled_deck.shift, card_five:shuffled_deck.shift,
-    #                    card_six: shuffled_deck.shift, position: 5)
-    #
-    #@bury = Bury.create(card_one: shuffled_deck.shift, card_two: shuffled_deck.shift)
-
-    #@trick1 = Trick.create(game: game)
-    #@play1 = Play.create(trick: @trick1, player: @player1)
+    [1, 2, 3, 4, 5].each do |i|
+      player = Player.create(username: "Player#{i}#{time}")
+      players << player
+    end
+    players
   end
 end
