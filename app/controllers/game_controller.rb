@@ -6,6 +6,15 @@ class GameController < ApplicationController
     @bury = Bury.find_by_game_id(game.id)
   end
 
+  def pick
+    game = find_game
+    game_player_ids = GamePlayer.find_all_by_game_id(game.id).map(&:id)
+    @hands = Hand.find_all_by_game_player_id(game_player_ids)
+    @bury = Bury.find_by_game_id(game.id)
+    @show_blind = true
+    render widget: Views::Game::Show
+  end
+
   def find_game
     if game_id = session && session[:game_id]
       game = Game.find(game_id)
