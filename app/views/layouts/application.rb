@@ -4,6 +4,7 @@ class Views::Layouts::Application < Erector::Widget
       head {
         title "Sheepshead - #{@page_title}"
         css "assets/application.css"
+        javascript_include_tag "application.js"
       }
       body {
         div.container {

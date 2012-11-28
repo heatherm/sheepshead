@@ -19,16 +19,31 @@ class Views::Game::Show < Views::Layouts::Application
         h3 "Blind"
         render_card_block(@bury.cards, @show_blind ||= false)
       end
-      div.span4 do
-        br
-        div class: 'btn btn-large btn-success' do
-          link_to "Pick", pick_path
-        end
-        br
-        br
-        div class: 'btn btn-large btn-danger' do
-          link_to "Pass", pass_path
-        end
+      if @show_blind
+        show_bury_area
+      else
+        show_pick_pass_buttons
+      end
+    end
+  end
+
+  def show_bury_area
+    h5 "Select two cards and click 'Bury'"
+    div class: 'btn btn-large btn-success' do
+      link_to "Bury", bury_path
+    end
+  end
+
+  def show_pick_pass_buttons
+    div.span4 do
+      br
+      div class: 'btn btn-large btn-success' do
+        link_to "Pick", pick_path
+      end
+      br
+      br
+      div class: 'btn btn-large btn-danger' do
+        link_to "Pass", pass_path
       end
     end
   end

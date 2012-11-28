@@ -20,6 +20,10 @@ html, body {
 	height: 100%;
 }
 
+div.btn a {
+    color: white;
+}
+
 body  {
     background-image: url("background.png");
 }
@@ -46,9 +50,6 @@ body  {
     border-radius: 5px;
 }
 
-.turn {
-    background-color: #e0ffff;
-}
 .front {
   background-color: #ffffff;
   color: #000000;
@@ -74,6 +75,10 @@ body  {
 .spotC5 { position: absolute; left: 2.50em; top: 3.5em; }
 
 .red { color: #ff0000; }
+
+.picked {
+    color: #62C462;
+}
 
 .ace {
   font-size: 300%;
