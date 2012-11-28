@@ -2,7 +2,7 @@ class Views::Cards::Card < Erector::Widget
   def content
     div.card style: @style do
       red = (@suit == "&hearts;" || @suit == "&diams;")
-      div class: "front #{'red' if red}" do
+      div class: "front #{ 'red' if red }", style: @display do
         div.index do
           rawtext @short_name
           br

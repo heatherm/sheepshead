@@ -39,6 +39,16 @@ body  {
   width:  3.75em;
   height: 5.00em;
 }
+
+.cardBlock {
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.turn {
+    background-color: #e0ffff;
+}
 .front {
   background-color: #ffffff;
   color: #000000;

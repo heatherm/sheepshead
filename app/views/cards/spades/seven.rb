@@ -2,6 +2,7 @@ class Views::Cards::Spades::Seven < Erector::Widget
   def content
     widget Views::Cards::Card.new(
                style: @style,
+               display: @display,
                short_name: "7",
                rank: "seven",
                suit: "&spades;",

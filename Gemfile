@@ -2,7 +2,7 @@ source :rubygems
 
 gem 'rails', '~>3.2'
 gem 'mysql2'
-gem 'erector', "0.9.0"
+gem 'erector', '0.9.0'
 gem 'devise'
 
 group :assets do
