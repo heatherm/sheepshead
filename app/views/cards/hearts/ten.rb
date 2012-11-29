@@ -4,7 +4,7 @@ class Views::Cards::Hearts::Ten < Erector::Widget
                style: @style,
                display: @display,
                short_name: "10",
-               rank: "queen",
+               rank: "ten",
                suit: "&hearts;",
                spots: [:A1, :A2, :A4, :A5, :B2, :B4, :C1, :C2, :C4, :C5]
            )

@@ -2,7 +2,10 @@ class Views::Cards::Card < Erector::Widget
   def content
     div.card style: @style do
       red = (@suit == "&hearts;" || @suit == "&diams;")
-      div onclick: "$(this).addClass('picked')", class: "front #{ 'red' if red }", style: @display do
+      div "data-name" => "#{@rank} #{@suit}",
+          onclick: "$(this).toggleClass('picked'); if ($(this).hasClass('picked')) {$('.bury h5').append('<br/>'); $('.bury h5').append($(this).data('name'))}",
+          class: "front #{ 'red' if red }",
+          style: @display do
         div.index do
           rawtext @short_name
           br

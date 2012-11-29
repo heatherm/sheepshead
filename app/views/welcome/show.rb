@@ -31,11 +31,6 @@ class Views::Welcome::Show < Views::Layouts::Application
           end
         end
       end
-      div.span3 do
-        div.row do
-
-        end
-      end
     end
   end
 end
