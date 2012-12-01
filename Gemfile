@@ -5,6 +5,7 @@ gem 'mysql2'
 gem 'erector', '0.9.0'
 gem 'devise'
 gem 'jquery-rails'
+gem 'thin'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -21,4 +22,5 @@ group :test, :development do
   gem 'machinist', '>= 2.0.0.beta2'
   gem 'specjour'
   gem 'database_cleaner'
+  gem 'rb-fsevent', '~> 0.9.1'
 end
