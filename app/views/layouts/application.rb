@@ -5,6 +5,7 @@ class Views::Layouts::Application < Erector::Widget
         title "Sheepshead - #{@page_title}"
         css "assets/application.css"
         javascript_include_tag "application.js"
+        javascript_include_tag "bury.js"
       }
       body {
         div.container {
@@ -22,6 +23,7 @@ class Views::Layouts::Application < Erector::Widget
         div.footer {
           footer
         }
+        javascript_initializations
       }
     }
   end
@@ -41,5 +43,11 @@ class Views::Layouts::Application < Erector::Widget
         a "Heather Moore", href: "http://www.heathrmoor.com"
       end
     end
+  end
+
+  def javascript_initializations
+    jquery <<-JAVASCRIPT
+      $(".front").selectCard();
+    JAVASCRIPT
   end
 end
