@@ -17,10 +17,8 @@ end
 
 group :test, :development do
   gem 'rspec-rails', '~> 2.0'
+  gem 'jasmine'
   gem 'machinist', '>= 2.0.0.beta2'
   gem 'specjour'
   gem 'database_cleaner'
 end
-
-gem 'jquery-rails'
-gem 'debugger'
