@@ -2,21 +2,21 @@ describe("burying", function () {
   beforeEach(function () {
     addHtml(
       '<div class="card" style="left:11em;top:.25em;">' +
-        '    <div class="front one" data-name="jack &amp;clubs;" style="">' +
+        '    <div class="front one" data-name="jack &amp;clubs;" data-id="1" style="">' +
         '        <div class="index">J<br>♣</div>' +
         '        <div class="spotA1">♣</div>' +
         '        <div class="spotC5">♣</div>' +
         '    </div>' +
         '</div>' +
         '<div class="card" style="left:11em;top:.25em;">' +
-        '    <div class="front two" data-name="king &amp;spades;" style="">' +
+        '    <div class="front two" data-name="king &amp;spades;" data-id="2" style="">' +
         '        <div class="index">J<br>♠</div>' +
         '        <div class="spotA1">♠</div>' +
         '        <div class="spotC5">♠</div>' +
         '    </div>' +
         '</div>' +
         '<div class="card" style="left:11em;top:.25em;">' +
-        '    <div class="front three" data-name="queen &amp;spades;" style="">' +
+        '    <div class="front three" data-name="queen &amp;spades;" data-id="3" style="">' +
         '        <div class="index">Q<br>♠</div>' +
         '        <div class="spotA1">♠</div>' +
         '        <div class="spotC5">♠</div>' +
@@ -79,6 +79,20 @@ describe("burying", function () {
       $(".front.one").click();
       $(".btn").click();
       expect($('.bury h5').text()).toEqual('Select two cards and click \'Bury\'. Please select 2 cards.');
+    });
+
+    it("should serialize the picked cards and send in ids", function(){
+      $(".front.one").click();
+      $(".front.two").click();
+
+      var ajaxSpy = spyOn($, "ajax");
+      expect(ajaxSpy).not.toHaveBeenCalled();
+
+      $(".btn").click();
+      expect(ajaxSpy).toHaveBeenCalled();
+      expect(ajaxSpy.mostRecentCall.args[0]["data"]).toEqual({ "ids" : [1, 2] });
+      expect(ajaxSpy.mostRecentCall.args[0]["url"]).toEqual("/bury");
+      expect(ajaxSpy.mostRecentCall.args[0]["type"]).toEqual("PUT");
     });
   });
 });
