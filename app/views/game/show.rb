@@ -30,6 +30,8 @@ class Views::Game::Show < Views::Layouts::Application
   def show_bury_area
     div.bury do
       h5 "Select two cards and click 'Bury'"
+      div.area
+      br
       div class: 'btn btn-large btn-success' do
         link_to "Bury", bury_path
       end

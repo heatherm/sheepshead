@@ -1,12 +1,20 @@
-(function($) {
-  $.fn.selectCard = function() {
-    $(this).click(function(event) {
+(function ($) {
+  $.fn.selectCard = function () {
+    $(this).click(function (event) {
       event.preventDefault();
       var card = $(this);
-      card.addClass('picked');
+      card.toggleClass('picked');
       var cardName = card.data("name");
-      $('.bury h5').append('<br/>');
-      $('.bury h5').append(cardName)
+      var buryList = $('.bury .area');
+      var cardText = '[ '+ cardName +' ]';
+      if (card.hasClass('picked')) {
+        buryList.append(cardText);
+      } else {
+        buryList.contents()
+          .filter(function (index, item) {
+            return this.nodeType == 3 && $(item).text() == $("<div/>").html(cardText).text();
+          }).remove();
+      }
     });
     return this;
   };
