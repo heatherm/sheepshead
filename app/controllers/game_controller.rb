@@ -1,18 +1,19 @@
 class GameController < ApplicationController
   def show
-    game = find_game
-    game_player_ids = GamePlayer.find_all_by_game_id(game.id).map(&:id)
-    @hands = Hand.find_all_by_game_player_id(game_player_ids)
-    @bury = Bury.find_by_game_id(game.id)
+    setup
   end
 
   def pick
+    setup
+    @show_blind = true
+    render widget: Views::Game::Show
+  end
+
+  def setup
     game = find_game
     game_player_ids = GamePlayer.find_all_by_game_id(game.id).map(&:id)
     @hands = Hand.find_all_by_game_player_id(game_player_ids)
     @bury = Bury.find_by_game_id(game.id)
-    @show_blind = true
-    render widget: Views::Game::Show
   end
 
   def find_game
