@@ -6,7 +6,7 @@
       card.toggleClass('picked');
       if ($('.picked').length > 2) {
         card.toggleClass('picked');
-        $('.bury h5').text('Select two cards and click \'Bury\'. '+
+        $('.bury h5').text('Select two cards and click \'Bury\'. ' +
           'Only 2 cards allowed. Deselect if needed.');
       } else {
         $('.bury h5').text('Select two cards and click \'Bury\'.');
@@ -24,5 +24,16 @@
       }
     });
     return this;
+  };
+
+  $.fn.doBury = function () {
+    $(this).click(function (event) {
+      event.preventDefault();
+      if ($('.picked').length != 2){
+        $('.bury h5').text('Select two cards and click \'Bury\'. Please select 2 cards.');
+        return false;
+      }
+      return true;
+    });
   };
 })(jQuery);
