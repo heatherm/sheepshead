@@ -32,6 +32,15 @@ body  {
     padding: 10px;
 }
 
+.bury h5 {
+    margin-top:25px;
+    height: 40px;
+}
+
+.bury .area {
+    height: 20px;
+}
+
 .card {
   background-image: url("cardback.gif");
   border-color: #808080 #000000 #000000 #808080;
@@ -48,6 +57,10 @@ body  {
     padding: 20px;
     margin: 10px;
     border-radius: 5px;
+}
+
+.span9 .cardBlock {
+    height: 3em !important;
 }
 
 .front {
@@ -115,8 +128,7 @@ body  {
 }
 
 /* Set the fixed height of the footer here */
-.push,
-.footer {
+.footer, .push {
   height: 60px;
 }
 .footer {
