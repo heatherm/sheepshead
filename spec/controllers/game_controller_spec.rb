@@ -4,8 +4,10 @@ describe GameController do
   describe "show" do
     context 'when the user already has a session' do
       before do
-        @game = Game.make!
+        @game = Game.create
+        @game_player = GamePlayer.create(game_id: @game.id)
         @request.session[:game_id] = @game.id
+        @request.session[:game_player_id] = @game_player.id
       end
       it "should rehydrate the game from the session" do
         get :show
@@ -17,10 +19,15 @@ describe GameController do
     context 'when the user is new' do
       it "should set the session" do
         game = double("game", id: 1)
-        controller.should_receive(:create_new_game).and_return(game)
+        game_player = double("game player", id: 2)
+        controller.should_receive(:create_new_game).and_return([game, game_player])
         @request.session[:game_id] = nil
-        lambda {
-          get :show }.should change {@request.session[:game_id]}.from(nil).to(1)
+        @request.session[:game_player_id] = nil
+
+        get :show
+
+        @request.session[:game_id] = 1
+        @request.session[:game_player_id] = 2
       end
     end
   end
