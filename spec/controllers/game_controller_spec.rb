@@ -24,4 +24,23 @@ describe GameController do
       end
     end
   end
+
+  describe "#create_players" do
+    it "should create 5 players" do
+      players = controller.create_players
+      players.count.should == 5
+    end
+  end
+
+  describe "#create_players" do
+    it "should create a game player for each player" do
+      player = double("player", id: 1)
+      player_two = double("player two", id: 2)
+      game = double("game", id: 3)
+      game_players = controller.create_game_players(game, [player, player_two])
+      game_players.count.should == 2
+      game_players.first.game_id.should == game.id
+      game_players.first.player_id.should == player.id
+    end
+  end
 end
