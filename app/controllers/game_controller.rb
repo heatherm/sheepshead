@@ -1,12 +1,13 @@
 class GameController < ApplicationController
   def show
     setup
+    render :file => 'game/show.rb'
   end
 
   def pick
     setup
     @show_blind = true
-    render widget: Views::Game::Show
+    render :file => 'game/show.rb'
   end
 
   def setup
