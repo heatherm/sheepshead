@@ -23,7 +23,10 @@ describe("burying", function() {
           '        <div class="spotC5">♠</div>'+
           '    </div>'+
           '</div>'+
-          '<div class="bury"><div class="area"></div>'
+          '<div class="bury">' +
+            '<h5>Select two cards and click \'Bury\'</h5>' +
+            '<div class="area">' +
+          '</div>'
        );
       $(".front").selectCard();
     });
@@ -36,7 +39,7 @@ describe("burying", function() {
 
     it("should update the list of cards to be burried", function() {
       $(".front.one").click();
-      expect($(".bury").text()).toEqual("[ jack ♣ ]");
+      expect($(".bury .area").text()).toEqual("[ jack ♣ ]");
     });
 
     it("should remove the class 'picked' from the deselected card", function() {
@@ -58,6 +61,14 @@ describe("burying", function() {
       $(".front.two").click();
       $(".front.one").click();
       expect($('.bury .area').text()).toEqual('[ king ♠ ]');
+    });
+
+    it("should not allow more than two picked cards", function() {
+      $(".front.one").click();
+      $(".front.two").click();
+      $(".front.three").click();
+      expect($('.bury h5').text()).toEqual('Select two cards and click \'Bury\'. Only 2 cards allowed. Deselect if needed.');
+      expect($('.bury .area').text()).toEqual('[ jack ♣ ][ king ♠ ]');
     });
   });
 });
