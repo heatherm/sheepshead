@@ -3,6 +3,7 @@ class Views::Cards::Card < Erector::Widget
     div.card style: @style do
       red = (@suit == "&hearts;" || @suit == "&diams;")
       div "data-name" => "#{@rank} #{@suit}",
+          "data-id" => @id,
           class: "front #{ 'red' if red }",
           style: @display do
         div.index do

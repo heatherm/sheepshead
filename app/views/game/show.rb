@@ -61,7 +61,7 @@ class Views::Game::Show < Views::Layouts::Application
     display = show ? "" : "visibility:hidden;"
     div.cardBlock style: "position: relative; height:10em;" do
       cards.each_with_index do |card, i|
-        widget eval("Views::Cards::#{card.suit.humanize}::#{card.rank.humanize}.new(style: positions[i], display: display)")
+        widget eval("Views::Cards::#{card.suit.humanize}::#{card.rank.humanize}.new(style: positions[i], display: display, id: card.id)")
       end
     end
   end

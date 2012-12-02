@@ -2,6 +2,7 @@ class Views::Cards::Clubs::Nine < Erector::Widget
   def content
     widget Views::Cards::Card.new(
                style: @style,
+               id: @id,
                display: @display,
                short_name: "9",
                rank: "nine",
