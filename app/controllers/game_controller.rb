@@ -10,37 +10,65 @@ class GameController < ApplicationController
     render :file => 'game/show.rb'
   end
 
+  def bury
+    card_one_id, card_two_id = params[:cards].split(',')
+    setup
+    new_hand_card_ids = [
+        @hand.card_one_id,
+        @hand.card_two_id,
+        @hand.card_three_id,
+        @hand.card_four_id,
+        @hand.card_five_id,
+        @hand.card_six_id,
+        @bury.card_one_id,
+        @bury.card_two_id
+    ] - [card_one_id, card_two_id]
+    @bury.update_attribute(:card_one_id, card_one_id)
+    @bury.update_attribute(:card_two_id, card_two_id)
+    @hand.update_attribute(:card_one_id, new_hand_card_ids[0])
+    @hand.update_attribute(:card_two_id, new_hand_card_ids[1])
+    @hand.update_attribute(:card_three_id, new_hand_card_ids[2])
+    @hand.update_attribute(:card_four_id, new_hand_card_ids[3])
+    @hand.update_attribute(:card_five_id, new_hand_card_ids[4])
+    @hand.update_attribute(:card_six_id, new_hand_card_ids[5])
+    @show_blind = true
+    render :file => 'game/show.rb'
+  end
+
   def setup
-    game = find_game
-    game_player_ids = GamePlayer.find_all_by_game_id(game.id).map(&:id)
-    @hands = Hand.find_all_by_game_player_id(game_player_ids)
+    game, game_player = find_game
+    @hand = Hand.find_by_game_player_id(game_player.id)
     @bury = Bury.find_by_game_id(game.id)
   end
 
   def find_game
     if game_id = session && session[:game_id]
-      game = Game.find(game_id)
+      if game_player_id = session[:game_player_id]
+        game = Game.find(game_id)
+        game_player = GamePlayer.find(game_player_id)
+      end
     else
-      game = create_new_game
+      game, game_player = create_new_game
       session[:game_id] = game.id
+      session[:game_player_id] = game_player.id
     end
-    game
+    [game, game_player]
   end
 
   def create_new_game
-    @game = Game.create
+    game = Game.create
     shuffled_deck = Card.all.shuffle
 
     players = create_players
-    game_players = create_game_players(players)
+    game_players = create_game_players(game, players)
 
     create_hands(game_players, shuffled_deck)
 
-    Bury.create(card_one_id: shuffled_deck.shift.id, card_two_id: shuffled_deck.shift.id, game_id: @game.id)
+    Bury.create(card_one_id: shuffled_deck.shift.id, card_two_id: shuffled_deck.shift.id, game_id: game.id)
 
-    trick1 = Trick.create(game_id: @game.id)
+    trick1 = Trick.create(game_id: game.id)
     Play.create(trick_id: trick1.id, game_player_id: game_players.first.id)
-    @game
+    [game, game_players.first]
   end
 
   def create_hands(game_players, shuffled_deck)
@@ -51,10 +79,10 @@ class GameController < ApplicationController
     end
   end
 
-  def create_game_players(players)
+  def create_game_players(game, players)
     game_players = []
     players.each do |player|
-      game_player = GamePlayer.create(game_id: @game.id, player_id: player.id)
+      game_player = GamePlayer.create(game_id: game.id, player_id: player.id)
       game_players << game_player
     end
     game_players
