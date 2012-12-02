@@ -8,7 +8,7 @@ class Views::Layouts::Application < Erector::Widget
         javascript_include_tag "bury.js"
       }
       body {
-        div.container {
+        div.container.wrap {
           div.page_header {
             h1 "Sheepshead"
             p.lead {
