@@ -32,15 +32,10 @@
       var pickedCards = $('.picked');
       if (pickedCards.length != 2){
         $('.bury h5').text('Select two cards and click \'Bury\'. Please select 2 cards.');
-        return false;
       } else {
         var pickedIds = _.map(pickedCards, function(card){return $(card).data('id')});
-        $.ajax({
-            type: "PUT",
-            url: "/bury",
-            contentType: "application/json",
-            data: {"ids": pickedIds}
-        });
+        $('.bury input.cards').val(pickedIds);
+        $('.bury form').submit();
       }
     });
   };

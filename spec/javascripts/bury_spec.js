@@ -2,30 +2,33 @@ describe("burying", function () {
   beforeEach(function () {
     addHtml(
       '<div class="card" style="left:11em;top:.25em;">' +
-        '    <div class="front one" data-name="jack &amp;clubs;" data-id="1" style="">' +
+        '    <div class="front one" data-name="jack &amp;clubs;" data-id="1">' +
         '        <div class="index">J<br>♣</div>' +
         '        <div class="spotA1">♣</div>' +
         '        <div class="spotC5">♣</div>' +
         '    </div>' +
         '</div>' +
         '<div class="card" style="left:11em;top:.25em;">' +
-        '    <div class="front two" data-name="king &amp;spades;" data-id="2" style="">' +
+        '    <div class="front two" data-name="king &amp;spades;" data-id="2">' +
         '        <div class="index">J<br>♠</div>' +
         '        <div class="spotA1">♠</div>' +
         '        <div class="spotC5">♠</div>' +
         '    </div>' +
         '</div>' +
         '<div class="card" style="left:11em;top:.25em;">' +
-        '    <div class="front three" data-name="queen &amp;spades;" data-id="3" style="">' +
+        '    <div class="front three" data-name="queen &amp;spades;" data-id="3">' +
         '        <div class="index">Q<br>♠</div>' +
         '        <div class="spotA1">♠</div>' +
         '        <div class="spotC5">♠</div>' +
         '    </div>' +
         '</div>' +
         '<div class="bury">' +
-        '<h5>Select two cards and click \'Bury\'</h5>' +
-        '<div class="area">' +
-        '<div class="btn"></div>'+
+        '  <h5>Select two cards and click \'Bury\'</h5>' +
+        '  <div class="area"></div>' +
+        '  <form action="/bury">' +
+        '    <input class="cards" type="hidden">' +
+        '    <input class="btn btn-large btn-success" type="submit" value="Bury">' +
+        '  </form>'+
         '</div>'
     );
     $(".front").selectCard();
@@ -81,18 +84,16 @@ describe("burying", function () {
       expect($('.bury h5').text()).toEqual('Select two cards and click \'Bury\'. Please select 2 cards.');
     });
 
-    it("should serialize the picked cards and send in ids", function(){
+    it("set the form value to the selected card ids and submit", function(){
+      var submitCallback = jasmine.createSpy().andReturn(false);
+      $('form').submit(submitCallback);
+
       $(".front.one").click();
       $(".front.two").click();
-
-      var ajaxSpy = spyOn($, "ajax");
-      expect(ajaxSpy).not.toHaveBeenCalled();
-
       $(".btn").click();
-      expect(ajaxSpy).toHaveBeenCalled();
-      expect(ajaxSpy.mostRecentCall.args[0]["data"]).toEqual({ "ids" : [1, 2] });
-      expect(ajaxSpy.mostRecentCall.args[0]["url"]).toEqual("/bury");
-      expect(ajaxSpy.mostRecentCall.args[0]["type"]).toEqual("PUT");
+
+      expect($('input.cards').val()).toBe("1,2");
+      expect(submitCallback).toHaveBeenCalled();
     });
   });
 });

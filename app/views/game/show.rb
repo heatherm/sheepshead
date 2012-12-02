@@ -32,8 +32,9 @@ class Views::Game::Show < Views::Layouts::Application
       h5 "Select two cards and click 'Bury'"
       div.area
       br
-      div class: 'btn btn-large btn-success' do
-        link_to "Bury", bury_path
+      form action: bury_path do
+        input.cards type: "hidden"
+        input class: 'btn btn-large btn-success', type: "submit", :value => "Bury"
       end
     end
   end
