@@ -2,7 +2,7 @@
 class Views::Game::Show < Views::Layouts::Application
   def initialize(attr={})
     super(page_title: "Play")
-    @hands = attr[:hands]
+    @hand = attr[:hand]
     @bury = attr[:bury]
     @show_blind = attr[:show_blind]
   end
@@ -11,7 +11,7 @@ class Views::Game::Show < Views::Layouts::Application
     div.row do
       div.span5 do
         h3 "Your Hand"
-        render_card_block(@hands.first.cards, true)
+        render_card_block(@hand.cards, true)
       end
     end
     div.row do
@@ -32,8 +32,8 @@ class Views::Game::Show < Views::Layouts::Application
       h5 "Select two cards and click 'Bury'"
       div.area
       br
-      form action: bury_path do
-        input.cards type: "hidden"
+      form action: bury_path, method: :post do
+        input.cards type: "hidden", name: "cards"
         input class: 'btn btn-large btn-success', type: "submit", :value => "Bury"
       end
     end
