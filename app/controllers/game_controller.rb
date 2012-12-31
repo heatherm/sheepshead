@@ -1,4 +1,5 @@
 class GameController < ApplicationController
+
   def show
     setup
     render :file => 'game/show.rb'
@@ -12,6 +13,9 @@ class GameController < ApplicationController
 
   def bury
     card_one_id, card_two_id = params[:cards].split(',')
+    p "********** CARDS TO BURY"
+    p Card.find(card_one_id)
+    p Card.find(card_two_id)
     setup
     new_hand_card_ids = [
         @hand.card_one_id,
@@ -23,14 +27,27 @@ class GameController < ApplicationController
         @bury.card_one_id,
         @bury.card_two_id
     ] - [card_one_id, card_two_id]
+    p "********** CARDS IN NEW HAND"
+    new_hand_card_ids.map{|id| p Card.find(id)}
+
     @bury.update_attribute(:card_one_id, card_one_id)
     @bury.update_attribute(:card_two_id, card_two_id)
+    @bury.save
+
+    p "********** CARDS IN BURY"
+    p @bury.cards
+
     @hand.update_attribute(:card_one_id, new_hand_card_ids[0])
     @hand.update_attribute(:card_two_id, new_hand_card_ids[1])
     @hand.update_attribute(:card_three_id, new_hand_card_ids[2])
     @hand.update_attribute(:card_four_id, new_hand_card_ids[3])
     @hand.update_attribute(:card_five_id, new_hand_card_ids[4])
     @hand.update_attribute(:card_six_id, new_hand_card_ids[5])
+    @hand.save
+
+    p "********** CARDS IN HAND"
+    p @hand.cards
+
     @show_blind = true
     render :file => 'game/show.rb'
   end

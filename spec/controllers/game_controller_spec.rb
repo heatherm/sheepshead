@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe GameController do
+
   describe "show" do
     context 'when the user already has a session' do
       before do
@@ -26,8 +27,8 @@ describe GameController do
 
         get :show
 
-        @request.session[:game_id] = 1
-        @request.session[:game_player_id] = 2
+        @request.session[:game_id].should == 1
+        @request.session[:game_player_id].should == 2
       end
     end
   end
