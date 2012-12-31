@@ -14,16 +14,7 @@ class GameController < ApplicationController
   def bury
     card_one_id, card_two_id = params[:cards].split(',')
     setup
-    bury_plus_hand_ids = [
-            @hand.card_one_id,
-            @hand.card_two_id,
-            @hand.card_three_id,
-            @hand.card_four_id,
-            @hand.card_five_id,
-            @hand.card_six_id,
-            @bury.card_one_id,
-            @bury.card_two_id
-        ]
+    bury_plus_hand_ids = [@hand.cards.map(&:id), @bury.cards.map(&:id)].flatten
 
     selected_card_ids = [card_one_id.to_i, card_two_id.to_i]
     new_hand_card_ids = bury_plus_hand_ids - selected_card_ids
