@@ -32,7 +32,7 @@ class Views::Game::Show < Views::Layouts::Application
       h5 "Select two cards and click 'Bury'"
       div.area
       br
-      form action: bury_path, method: :post do
+      form_for @bury, action: bury_path, method: :post do
         input.cards type: "hidden", name: "cards"
         input class: 'btn btn-large btn-success', type: "submit", :value => "Bury"
       end

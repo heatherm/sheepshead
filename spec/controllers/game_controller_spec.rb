@@ -10,6 +10,7 @@ describe GameController do
         @request.session[:game_id] = @game.id
         @request.session[:game_player_id] = @game_player.id
       end
+
       it "should rehydrate the game from the session" do
         get :show
         controller.should_not_receive(:create_new_game)
@@ -18,18 +19,45 @@ describe GameController do
     end
 
     context 'when the user is new' do
-      it "should set the session" do
-        game = double("game", id: 1)
-        game_player = double("game player", id: 2)
-        controller.should_receive(:create_new_game).and_return([game, game_player])
+      before do
+        @game = double("game", id: 1)
+        @game_player = double("game player", id: 2)
         @request.session[:game_id] = nil
         @request.session[:game_player_id] = nil
+      end
 
+      it "should set the session" do
+        controller.should_receive(:create_new_game).and_return([@game, @game_player])
         get :show
 
         @request.session[:game_id].should == 1
         @request.session[:game_player_id].should == 2
       end
+    end
+  end
+
+  describe "#bury" do
+    before do
+      get :show
+
+      @game_id = @request.session[:game_id]
+      @game_player_id = @request.session[:game_player_id]
+    end
+
+    it "updates hand and bury with params" do
+      hand = Hand.find_by_game_player_id(@game_player_id)
+      bury = Bury.find_by_game_id(@game_id)
+      card_ids = hand.cards.map(&:id)
+      zero_card = card_ids[0]
+      first_card = card_ids[1]
+      bury_ids = bury.cards.map(&:id)
+      post :bury, cards: "#{zero_card},#{first_card}"
+
+      after_hand = Hand.find_by_game_player_id(@game_player_id).cards.map(&:id)
+      after_hand.should_not include zero_card
+      after_hand.should_not include first_card
+      after_hand.should include bury_ids[0]
+      after_hand.should include bury_ids[1]
     end
   end
 

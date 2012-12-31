@@ -6,6 +6,7 @@ class Views::Layouts::Application < Erector::Widget
         css "assets/application.css"
         javascript_include_tag "application.js"
         javascript_include_tag "bury.js"
+        #csrf_meta_tags
       }
       body {
         div.container.wrap {
