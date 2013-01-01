@@ -22,8 +22,13 @@ class GameController < ApplicationController
     @bury.update_to(selected_card_ids)
     @hand.update_to(new_hand_card_ids)
 
-    @show_blind = true
-    redirect_to pick_path
+    @show_bury = true
+    render :file => 'game/show.rb'
+  end
+
+  def play
+    setup
+    render :file => 'game/play.rb'
   end
 
   def setup

@@ -32,12 +32,14 @@ body  {
     padding: 10px;
 }
 
-.bury h5 {
+.bury h5,
+.blind h5 {
     margin-top:25px;
     height: 40px;
 }
 
-.bury .area {
+.bury .area,
+.blind .area {
     height: 20px;
 }
 

@@ -1,10 +1,14 @@
 #encoding utf-8
+
+include Views::Game::CardRendering
+
 class Views::Game::Show < Views::Layouts::Application
   def initialize(attr={})
     super(page_title: "Play")
     @hand = attr[:hand]
     @bury = attr[:bury]
     @show_blind = attr[:show_blind]
+    @show_bury = attr[:show_bury]
   end
 
   def main
@@ -16,19 +20,38 @@ class Views::Game::Show < Views::Layouts::Application
     end
     div.row do
       div.span3 do
-        h3 "Blind"
-        render_card_block(@bury.cards, @show_blind ||= false)
+        h3 "Blind" if @show_blind
+        h3 "Bury" if @show_bury
+        render_card_block(@bury.cards, ((@show_bury || @show_blind) || false))
       end
       if @show_blind
-        show_bury_area
+        show_blind_area
+      elsif @show_bury
+        show_confirm_bury_area
       else
         show_pick_pass_buttons
       end
     end
   end
 
-  def show_bury_area
+  def show_confirm_bury_area
     div.bury do
+      h5 "Confirm bury"
+      div.area
+      br
+      div class: 'btn btn-large btn-success' do
+        link_to "Confirm & Play", play_path
+      end
+      br
+      br
+      div class: 'btn btn-large btn-danger' do
+        link_to "Re-pick", pick_path
+      end
+    end
+  end
+
+  def show_blind_area
+    div.blind do
       h5 "Select two cards and click 'Bury'"
       div.area
       br
@@ -53,17 +76,4 @@ class Views::Game::Show < Views::Layouts::Application
     end
   end
 
-  def render_card_block(cards, show)
-    positions = [
-         "left:1em;top:0em;", "left:3em;top:.25em;", "left:5em;top:0em;",
-         "left:7em;top:.25em;", "left:9em;top:0em;", "left:11em;top:.25em;",
-         "left:13em;top:0em;", "left:15em;top:.25em;"]
-
-    display = show ? "" : "visibility:hidden;"
-    div.cardBlock style: "position: relative; height:10em;" do
-      cards.each_with_index do |card, i|
-        widget eval("Views::Cards::#{card.suit.humanize}::#{card.rank.humanize}.new(style: positions[i], display: display, id: card.id)")
-      end
-    end
-  end
 end

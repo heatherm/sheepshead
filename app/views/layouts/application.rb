@@ -49,7 +49,7 @@ class Views::Layouts::Application < Erector::Widget
   def javascript_initializations
     jquery <<-JAVASCRIPT
       $(".front").selectCard();
-      $(".bury .btn").doBury();
+      $(".blind .btn").doBury();
     JAVASCRIPT
   end
 end
