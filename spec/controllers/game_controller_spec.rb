@@ -36,6 +36,25 @@ describe GameController do
     end
   end
 
+  describe "#pick" do
+    before do
+      get :show
+
+      @game_id = @request.session[:game_id]
+      @game_player_id = @request.session[:game_player_id]
+    end
+
+    it "should set the current user as the picker" do
+      get :pick
+      GamePlayer.find(@game_player_id).picker.should be_true
+    end
+
+    it "should set partner to false" do
+      get :pick
+      GamePlayer.find(@game_player_id).partner.should be_false
+    end
+  end
+
   describe "#bury" do
     before do
       get :show
@@ -51,6 +70,7 @@ describe GameController do
       zero_card = card_ids[0]
       first_card = card_ids[1]
       bury_ids = bury.cards.map(&:id)
+
       post :bury, cards: "#{zero_card},#{first_card}"
 
       after_hand = Hand.find_by_game_player_id(@game_player_id).cards.map(&:id)
@@ -66,9 +86,7 @@ describe GameController do
       players = controller.create_players
       players.count.should == 5
     end
-  end
 
-  describe "#create_players" do
     it "should create a game player for each player" do
       player = double("player", id: 1)
       player_two = double("player two", id: 2)
@@ -78,5 +96,7 @@ describe GameController do
       game_players.first.game_id.should == game.id
       game_players.first.player_id.should == player.id
     end
+
   end
+
 end

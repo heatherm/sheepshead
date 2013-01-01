@@ -7,6 +7,7 @@ class GameController < ApplicationController
 
   def pick
     setup
+    GamePlayer.find(session[:game_player_id]).make_picker
     @show_blind = true
     render :file => 'game/show.rb'
   end
@@ -52,18 +53,16 @@ class GameController < ApplicationController
   end
 
   def create_new_game
-    game = Game.create
     shuffled_deck = Card.all.shuffle
 
+    game = Game.create
     players = create_players
     game_players = create_game_players(game, players)
-
     create_hands(game_players, shuffled_deck)
-
     Bury.create(card_one_id: shuffled_deck.shift.id, card_two_id: shuffled_deck.shift.id, game_id: game.id)
-
     trick1 = Trick.create(game_id: game.id)
     Play.create(trick_id: trick1.id, game_player_id: game_players.first.id)
+
     [game, game_players.first]
   end
 
