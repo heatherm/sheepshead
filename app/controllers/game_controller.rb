@@ -29,6 +29,8 @@ class GameController < ApplicationController
 
   def play
     setup
+    game_player = GamePlayer.find(session[:game_player_id])
+    @picker = game_player.picker
     render :file => 'game/play.rb'
   end
 

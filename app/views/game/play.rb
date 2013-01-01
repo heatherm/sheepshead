@@ -6,6 +6,7 @@ class Views::Game::Play < Views::Layouts::Application
   def initialize(attr={})
     super(page_title: "First Round")
     @hand = attr[:hand]
+    @picker = attr[:picker]
   end
 
   def main
@@ -15,7 +16,10 @@ class Views::Game::Play < Views::Layouts::Application
 
     div.row do
       div.span5 do
-        h3 "Select a card to play. You are the dealer and picker."
+        seat = @hand.position
+        h3 seat == 0 ? "You are the dealer." : "You are #{seat} #{pluralize(seat, "seat", "seats")} to the left of the dealer."
+        h3 @picker ? "You are the picker" : "Someone else picked"
+        h5 "Select a card to play."
         render_card_block(@hand.cards, true)
       end
     end
