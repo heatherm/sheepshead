@@ -13,20 +13,14 @@ class GameController < ApplicationController
 
   def bury
     selected_card_ids = params[:cards].split(',').map(&:to_i)
-    setup
-    bury_plus_hand_ids = [@hand.cards.map(&:id), @bury.cards.map(&:id)].flatten
 
+    setup
+
+    bury_plus_hand_ids = [@hand.cards.map(&:id), @bury.cards.map(&:id)].flatten
     new_hand_card_ids = bury_plus_hand_ids - selected_card_ids
 
     @bury.update_to(selected_card_ids)
-
-    @hand.update_attribute(:card_one_id, new_hand_card_ids[0])
-    @hand.update_attribute(:card_two_id, new_hand_card_ids[1])
-    @hand.update_attribute(:card_three_id, new_hand_card_ids[2])
-    @hand.update_attribute(:card_four_id, new_hand_card_ids[3])
-    @hand.update_attribute(:card_five_id, new_hand_card_ids[4])
-    @hand.update_attribute(:card_six_id, new_hand_card_ids[5])
-    @hand.save
+    @hand.update_to(new_hand_card_ids)
 
     @show_blind = true
     redirect_to pick_path
