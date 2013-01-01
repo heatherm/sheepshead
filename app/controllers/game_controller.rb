@@ -18,9 +18,7 @@ class GameController < ApplicationController
 
     new_hand_card_ids = bury_plus_hand_ids - selected_card_ids
 
-    @bury.update_attribute(:card_one_id, selected_card_ids[0])
-    @bury.update_attribute(:card_two_id, selected_card_ids[1])
-    @bury.save
+    @bury.update_to(selected_card_ids)
 
     @hand.update_attribute(:card_one_id, new_hand_card_ids[0])
     @hand.update_attribute(:card_two_id, new_hand_card_ids[1])
