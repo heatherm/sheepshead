@@ -14,4 +14,8 @@ class Hand < ActiveRecord::Base
     self.update_attribute(:card_six_id, new_hand_card_ids[5])
     self.save
   end
+
+  def fail
+    cards.reject(&:trump?)
+  end
 end
